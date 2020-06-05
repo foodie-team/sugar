@@ -1,0 +1,3 @@
+rootProject.name='Sugar'
+include ':app'
+include ':sugar'
