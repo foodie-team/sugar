@@ -1,3 +1,15 @@
+/**
+ * 在对应的子模块里使用，例子:
+ * ```groovy
+ * apply from: '../gradle/publish.gradle'
+ * publishConfig([
+ *   groupId      : 'com.github.foodiestudio',
+ *   artifactId   : archivesBaseName,
+ *   versionNumber: android.defaultConfig.versionName,
+ *   githubRepo   : "foodiestudio/sugar",
+ * ])
+ * ```
+ */
 ext.publishConfig = { map ->
     apply plugin: 'maven-publish'
     afterEvaluate {
@@ -33,11 +45,9 @@ ext.publishConfig = { map ->
 //                }
                 maven {
                     def localProp = new Properties()
-                    try {
-                        localProp.load(new FileInputStream(rootProject.file("local.properties")))
-                    } catch (Exception e) {
-                        // do nothing
-                        e.printStackTrace()
+                    def localFile = rootProject.file("local.properties")
+                    if (local != null) {
+                        localProp.load(new FileInputStream(localFile))
                     }
 
                     name = "GitHubPackages"
