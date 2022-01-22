@@ -33,7 +33,10 @@ ext.publishConfig = { map ->
 //                }
                 maven {
                     def localProp = new Properties()
-                    localProp.load(new FileInputStream(rootProject.file("local.properties")))
+                    def local = rootProject.file("local.properties")
+                    if (local != null) {
+                        localProp.load(new FileInputStream(local))
+                    }
 
                     name = "GitHubPackages"
                     /** Configure path of your package repository on Github
