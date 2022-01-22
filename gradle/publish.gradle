@@ -46,7 +46,7 @@ ext.publishConfig = { map ->
                 maven {
                     def localProp = new Properties()
                     def localFile = rootProject.file("local.properties")
-                    if (local != null) {
+                    if (localFile != null) {
                         localProp.load(new FileInputStream(localFile))
                     }
 
