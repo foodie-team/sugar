@@ -1,0 +1,52 @@
+ext.publishConfig = { map ->
+    apply plugin: 'maven-publish'
+    afterEvaluate {
+        def versionNumber = map['versionNumber']
+        def group = map['groupId']
+        def artifact = map['artifactId']
+        def GITHUB_USERID_REPOSITORY = map['githubRepo']
+        publishing {
+            publications {
+                release(MavenPublication) {
+                    from components.release
+
+                    groupId = group
+                    artifactId = artifact
+                    version = versionNumber
+                }
+//                snapshot(MavenPublication) {
+//                    from components.release
+//
+//                    groupId = group
+//                    artifactId = artifact
+//                    version = versionNumber.endsWith('-SNAPSHOT') ? versionNumber : versionNumber + "-SNAPSHOT"
+//                }
+            }
+
+            repositories {
+//                maven {
+//                    def releasesRepoUrl = "$buildDir/repos/releases"
+//                    def snapshotsRepoUrl = "$buildDir/repos/snapshots"
+//
+//                    name = "temp"
+//                    url = versionNumber.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+//                }
+                maven {
+                    def localProp = new Properties()
+                    localProp.load(new FileInputStream(rootProject.file("local.properties")))
+
+                    name = "GitHubPackages"
+                    /** Configure path of your package repository on Github
+                     ** Replace GITHUB_USERID with your/organisation Github userID
+                     ** and REPOSITORY with the repository name on GitHub
+                     */
+                    url = uri("https://maven.pkg.github.com/$GITHUB_USERID_REPOSITORY")
+                    credentials {
+                        username = localProp['gpr.usr'] ?: System.getenv("USERNAME")
+                        password = localProp['gpr.key'] ?: System.getenv("TOKEN")
+                    }
+                }
+            }
+        }
+    }
+}
