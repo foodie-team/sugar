@@ -33,9 +33,11 @@ ext.publishConfig = { map ->
 //                }
                 maven {
                     def localProp = new Properties()
-                    def local = rootProject.file("local.properties")
-                    if (local != null) {
-                        localProp.load(new FileInputStream(local))
+                    try {
+                        localProp.load(new FileInputStream(rootProject.file("local.properties")))
+                    } catch (Exception e) {
+                        // do nothing
+                        e.printStackTrace()
                     }
 
                     name = "GitHubPackages"
