@@ -1,4 +1,4 @@
-package com.github.foodie_team.sugar
+package com.github.foodiestudio.sugar
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

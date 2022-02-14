@@ -1,4 +1,4 @@
-package com.github.foodie_team.sugar
+package com.github.foodiestudio.sugar
 
 import android.content.res.Resources
 import android.util.TypedValue

@@ -1,4 +1,4 @@
-package com.github.foodie_team.sugar.sample
+package com.github.foodiestudio.sugar.sample
 
 import org.junit.Test
 

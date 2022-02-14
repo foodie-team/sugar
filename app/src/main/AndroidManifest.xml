@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.github.foodie_team.sugar.sample">
+    package="com.github.foodiestudio.sugar.sample">
 
     <application
         android:allowBackup="true"
