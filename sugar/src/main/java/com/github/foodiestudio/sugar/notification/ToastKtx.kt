@@ -45,6 +45,9 @@ fun Context?.longToast(message: CharSequence?, style: ToastStyle = ToastStyles.D
     }
 }
 
+/**
+ * 内容先置为 null 再设置实际文本，可以规避一些机型 toast 前缀强制带上「应用名」
+ */
 private fun buildToast(
     context: Context,
     message: CharSequence,
@@ -53,9 +56,10 @@ private fun buildToast(
 ): Toast {
     return ToastCompat.makeText(
         context,
-        message,
+        null,
         if (longToast) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
     ).apply {
+        setText(message)
         setGravity(style.gravity, style.xOffset, style.yOffset)
     }
 }
