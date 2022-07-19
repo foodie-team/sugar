@@ -56,7 +56,7 @@ private fun buildToast(
 ): Toast {
     return ToastCompat.makeText(
         context,
-        null,
+        "",
         if (longToast) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
     ).apply {
         setText(message)
