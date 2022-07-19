@@ -1,6 +1,7 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    alias libs.plugins.android.library
+    alias libs.plugins.kotlin.android
+}
 
 android {
     compileSdkVersion 31
@@ -21,20 +22,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'androidx.recyclerview:recyclerview:1.2.0'
-    implementation 'androidx.lifecycle:lifecycle-service:2.3.1'
-    implementation 'me.drakeet.support:toastcompat:1.1.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation libs.kotlin.stdlib
+    implementation libs.appcompat
+    implementation libs.recyclerview
+    implementation libs.toast
+    implementation libs.androidx.ktx
+    implementation libs.lifecycle.service
+    testImplementation libs.bundles.unit.tests
+    androidTestImplementation libs.bundles.android.tests
 }
 
 apply from: '../gradle/publish.gradle'
