@@ -7,7 +7,7 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * 适用于绘制分类的头部，仅当 [shouldShowHeader] 情况满足的情况下才会展示 [header]
+ * 适用于绘制分类的底部，仅当 [shouldShowFooter] 情况满足的情况下才会展示 [footer]
  */
 internal class FooterItemDecoration(
     private val footer: View,
