@@ -5,13 +5,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    namespace = "com.github.foodiestudio.sugar"
+
+    compileSdk 33
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 31
-        versionCode 1
-        versionName "0.0.1-rc.9"
+        minSdkVersion 26
+        targetSdkVersion 33
+        versionCode 20230619
+        versionName "1.0.0-rc.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -33,14 +35,7 @@ android {
 }
 
 dependencies {
-    implementation libs.kotlin.stdlib
-    implementation libs.appcompat
-    implementation libs.recyclerview
-    implementation libs.toast
-    implementation libs.androidx.ktx
-    implementation libs.lifecycle.service
-    testImplementation libs.bundles.unit.tests
-    androidTestImplementation libs.bundles.android.tests
+    implementation libs.androidx.lifecycle.service
 }
 
 apply from: '../gradle/publish.gradle'

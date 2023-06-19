@@ -1,34 +1,8 @@
 public final class ToastKtxKt {
-	public static final fun longToast (Landroid/content/Context;ILToastStyle;)V
-	public static final fun longToast (Landroid/content/Context;Ljava/lang/CharSequence;LToastStyle;)V
-	public static synthetic fun longToast$default (Landroid/content/Context;ILToastStyle;ILjava/lang/Object;)V
-	public static synthetic fun longToast$default (Landroid/content/Context;Ljava/lang/CharSequence;LToastStyle;ILjava/lang/Object;)V
-	public static final fun toast (Landroid/content/Context;ILToastStyle;)V
-	public static final fun toast (Landroid/content/Context;Ljava/lang/CharSequence;LToastStyle;)V
-	public static synthetic fun toast$default (Landroid/content/Context;ILToastStyle;ILjava/lang/Object;)V
-	public static synthetic fun toast$default (Landroid/content/Context;Ljava/lang/CharSequence;LToastStyle;ILjava/lang/Object;)V
-}
-
-public final class ToastStyle {
-	public fun <init> ()V
-	public fun <init> (III)V
-	public synthetic fun <init> (IIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()I
-	public final fun component2 ()I
-	public final fun component3 ()I
-	public final fun copy (III)LToastStyle;
-	public static synthetic fun copy$default (LToastStyle;IIIILjava/lang/Object;)LToastStyle;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getGravity ()I
-	public final fun getXOffset ()I
-	public final fun getYOffset ()I
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class ToastStyles {
-	public static final field INSTANCE LToastStyles;
-	public final fun getDefault ()LToastStyle;
+	public static final fun longToast (Landroid/content/Context;I)V
+	public static final fun longToast (Landroid/content/Context;Ljava/lang/CharSequence;)V
+	public static final fun toast (Landroid/content/Context;I)V
+	public static final fun toast (Landroid/content/Context;Ljava/lang/CharSequence;)V
 }
 
 public final class com/github/foodiestudio/sugar/BuildConfig {
@@ -36,12 +10,6 @@ public final class com/github/foodiestudio/sugar/BuildConfig {
 	public static final field DEBUG Z
 	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
 	public fun <init> ()V
-}
-
-public final class com/github/foodiestudio/sugar/DimensionKt {
-	public static final fun getDp (Ljava/lang/Number;)F
-	public static final fun getSp (Ljava/lang/Number;)F
-	public static final fun toDp (Ljava/lang/Number;)F
 }
 
 public abstract class com/github/foodiestudio/sugar/accessibility/LifecycleAccessibilityService : android/accessibilityservice/AccessibilityService, androidx/lifecycle/LifecycleOwner {

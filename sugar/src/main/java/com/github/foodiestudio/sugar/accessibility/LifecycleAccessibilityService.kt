@@ -31,6 +31,7 @@ abstract class LifecycleAccessibilityService : AccessibilityService(), Lifecycle
         super.onDestroy()
     }
 
-    override fun getLifecycle(): Lifecycle = mDispatcher.lifecycle
+    override val lifecycle: Lifecycle
+        get() = mDispatcher.lifecycle
 
 }
