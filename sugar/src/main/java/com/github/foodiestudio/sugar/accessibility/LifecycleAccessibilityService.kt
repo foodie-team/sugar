@@ -8,7 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ServiceLifecycleDispatcher
 
 /**
- * A AccessibilityService that is also a {@link LifecycleOwner}.
+ * An AccessibilityService that is also a [LifecycleOwner]
  */
 abstract class LifecycleAccessibilityService : AccessibilityService(), LifecycleOwner {
     private val mDispatcher = ServiceLifecycleDispatcher(this)
