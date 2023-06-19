@@ -12,7 +12,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 33
         versionCode 20230619
-        versionName "1.0.0-SNAPSHOT"
+        versionName "1.0.0-rc.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
