@@ -12,8 +12,6 @@ android {
     defaultConfig {
         minSdkVersion 26
         targetSdkVersion 33
-        versionCode 20230620
-        versionName "1.0.0-rc.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -43,6 +41,6 @@ apply from: '../gradle/publish.gradle'
 publishConfig([
         groupId      : 'com.github.foodiestudio',
         artifactId   : archivesBaseName,
-        versionNumber: android.defaultConfig.versionName,
+        versionNumber: findProperty("publish.version") as String,
         githubRepo   : "foodiestudio/sugar",
 ])
