@@ -35,6 +35,8 @@ android {
 dependencies {
     implementation libs.kotlin.stdlib
     implementation libs.androidx.lifecycle.service
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
 }
 
 apply from: '../gradle/publish.gradle'

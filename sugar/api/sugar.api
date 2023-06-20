@@ -20,6 +20,10 @@ public abstract class com/github/foodiestudio/sugar/accessibility/LifecycleAcces
 	protected fun onServiceConnected ()V
 }
 
+public final class com/github/foodiestudio/sugar/draw/MirrorKt {
+	public static final fun mirror (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
+}
+
 public final class com/github/foodiestudio/sugar/intent/CommonIntents {
 	public static final field INSTANCE Lcom/github/foodiestudio/sugar/intent/CommonIntents;
 	public final fun getHOME_SCREEN ()Landroid/content/Intent;
