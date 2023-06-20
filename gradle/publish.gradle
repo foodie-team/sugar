@@ -11,6 +11,7 @@
  * ```
  */
 ext.publishConfig = { map ->
+    apply plugin: 'maven-publish'
     afterEvaluate {
         def versionNumber = map['versionNumber']
         def group = map['groupId']
