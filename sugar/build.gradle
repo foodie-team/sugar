@@ -1,6 +1,6 @@
 plugins {
-    alias libs.plugins.android.library
-    alias libs.plugins.kotlin.android
+    alias sharedLibs.plugins.android.library
+    alias sharedLibs.plugins.kotlin.android
     alias libs.plugins.compatibility.validator
 }
 
@@ -34,9 +34,9 @@ android {
 
 dependencies {
     implementation libs.kotlin.stdlib
-    implementation libs.androidx.lifecycle.service
-    implementation(platform(libs.compose.bom))
-    implementation(libs.compose.ui)
+    implementation sharedLibs.androidx.lifecycle.service
+    implementation(platform(sharedLibs.compose.bom))
+    implementation(sharedLibs.compose.ui)
 }
 
 apply from: '../gradle/publish.gradle'
