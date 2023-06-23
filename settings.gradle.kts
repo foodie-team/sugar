@@ -13,7 +13,7 @@ dependencyResolutionManagement {
         mavenCentral()
         maven {
             name = "Github Packages"
-            url = uri("https://maven.pkg.github.com/foodiestudio/public")
+            url = uri("https://maven.pkg.github.com/foodiestudio/libs-versions")
             credentials {
                 // your GitHub username
                 username = extra["github.username"] as String
