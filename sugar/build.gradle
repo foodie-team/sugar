@@ -38,11 +38,3 @@ dependencies {
     implementation(platform(sharedLibs.compose.bom))
     implementation(sharedLibs.compose.ui)
 }
-
-apply from: '../gradle/publish.gradle'
-publishConfig([
-        groupId      : 'com.github.foodiestudio',
-        artifactId   : archivesBaseName,
-        versionNumber: findProperty("publish.version") as String,
-        githubRepo   : "foodiestudio/sugar",
-])
