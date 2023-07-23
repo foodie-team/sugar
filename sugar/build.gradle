@@ -38,4 +38,5 @@ dependencies {
     implementation(platform(sharedLibs.compose.bom))
     implementation(sharedLibs.compose.ui)
     implementation(libs.bundles.modernstorage)
+    api(libs.okio)
 }
