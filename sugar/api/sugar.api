@@ -29,3 +29,44 @@ public final class com/github/foodiestudio/sugar/intent/CommonIntents {
 	public final fun getHOME_SCREEN ()Landroid/content/Intent;
 }
 
+public final class com/github/foodiestudio/sugar/saf/MediaStoreHelper {
+	public static final field INSTANCE Lcom/github/foodiestudio/sugar/saf/MediaStoreHelper;
+	public final fun createMediaStoreUri (Ljava/lang/String;Landroid/net/Uri;Ljava/lang/String;)Landroid/net/Uri;
+	public static synthetic fun createMediaStoreUri$default (Lcom/github/foodiestudio/sugar/saf/MediaStoreHelper;Ljava/lang/String;Landroid/net/Uri;Ljava/lang/String;ILjava/lang/Object;)Landroid/net/Uri;
+	public final fun scanFile (Ljava/io/File;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun scanUri (Landroid/net/Uri;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/github/foodiestudio/sugar/saf/SAFHelper : okio/FileSystem {
+	public static final field INSTANCE Lcom/github/foodiestudio/sugar/saf/SAFHelper;
+	public fun appendingSink (Lokio/Path;Z)Lokio/Sink;
+	public fun atomicMove (Lokio/Path;Lokio/Path;)V
+	public fun canonicalize (Lokio/Path;)Lokio/Path;
+	public fun copy (Lokio/Path;Lokio/Path;)V
+	public fun createDirectory (Lokio/Path;Z)V
+	public fun createSymlink (Lokio/Path;Lokio/Path;)V
+	public fun delete (Lokio/Path;Z)V
+	public final fun init (Landroid/app/Application;)V
+	public fun list (Lokio/Path;)Ljava/util/List;
+	public fun listOrNull (Lokio/Path;)Ljava/util/List;
+	public fun metadataOrNull (Lokio/Path;)Lokio/FileMetadata;
+	public fun openReadOnly (Lokio/Path;)Lokio/FileHandle;
+	public fun openReadWrite (Lokio/Path;ZZ)Lokio/FileHandle;
+	public fun sink (Lokio/Path;Z)Lokio/Sink;
+	public fun source (Lokio/Path;)Lokio/Source;
+}
+
+public final class com/github/foodiestudio/sugar/saf/SAFHelperKt {
+	public static final fun absoluteFilePathOrNull (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Landroid/net/Uri;)Ljava/lang/String;
+	public static final fun copy (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Landroid/net/Uri;Ljava/io/File;)V
+	public static final fun metadataOrNull (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Landroid/net/Uri;)Lokio/FileMetadata;
+	public static final fun mimeTypeOrNull (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Landroid/net/Uri;)Ljava/lang/String;
+}
+
+public final class com/github/foodiestudio/sugar/saf/StoragePermissionsKt {
+	public static final fun hasReadAccessByAllApps (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Ljava/util/List;)Z
+	public static final fun hasReadAccessBySelf (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Ljava/util/List;)Z
+	public static final fun hasWriteAccessByAllApps (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Ljava/util/List;)Z
+	public static final fun hasWriteAccessBySelf (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Ljava/util/List;)Z
+}
+
