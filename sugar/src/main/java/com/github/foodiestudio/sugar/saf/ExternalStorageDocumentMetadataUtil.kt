@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 
+// 文件选择器侧边栏里从 『手机名』入口进去的
 internal const val ExternalStorageDocumentProvider_AUTHORITY =
     "com.android.externalstorage.documents"
 

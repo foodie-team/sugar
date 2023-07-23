@@ -8,12 +8,10 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import java.io.File
 
-// https://stackoverflow.com/questions/17546101/get-real-path-for-uri-android/61995806#61995806
-
+// 文件选择器中的「DownLoad」入口进来的
 internal const val DownloadDocumentProvider_AUTHORITY = "com.android.providers.downloads.documents"
 
 internal fun queryDownloadDocumentFilePath(contentResolver: ContentResolver, uri: Uri): String? {
-    // TODO: 查询的是 MediaStore 的文件名，非 Media 是否能起作用待测试
     val fileName = MediaStoreHelper.getDisplayName(contentResolver, uri)
     if (fileName != null) {
         return Environment.getExternalStorageDirectory()
@@ -32,7 +30,7 @@ internal fun queryDownloadDocumentFilePath(contentResolver: ContentResolver, uri
     return getDataColumn(contentResolver, contentUri, null, null)
 }
 
-internal fun getDataColumn(
+private fun getDataColumn(
     contentResolver: ContentResolver, uri: Uri?, selection: String?,
     selectionArgs: Array<String>?
 ): String? {
