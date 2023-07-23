@@ -57,18 +57,16 @@ object SAFHelper : FileSystem() {
         val uri = path.toUri()
 
         // FIXME: fileSystem 并未处理 content provider 情况时的 filePath
-        // FIXME: 这里参考了 https://stackoverflow.com/questions/17546101/get-real-path-for-uri-android/61995806#61995806
+        // FIXME: 主要参考了 https://stackoverflow.com/questions/17546101/get-real-path-for-uri-android/61995806#61995806
         return when (uri.authority) {
+            // Downloads 入口
             DownloadDocumentProvider_AUTHORITY -> fetchMetadataFromDocumentProvider(
                 contentResolver, path, uri, ::queryDownloadDocumentFilePath
             )
 
+            // 「手机名称」的入口
             ExternalStorageDocumentProvider_AUTHORITY -> fetchMetadataFromDocumentProvider(
                 contentResolver, path, uri, ::queryExternalStorageDocumentFilePath
-            )
-
-            MediaDocumentProvider_AUTHORITY -> fetchMetadataFromDocumentProvider(
-                contentResolver, path, uri, MediaStoreHelper::getFilePath
             )
 
             else -> fileSystem.metadataOrNull(path)
@@ -134,6 +132,12 @@ fun SAFHelper.mimeTypeOrNull(uri: Uri): String? = metadataOrNull(uri.toOkioPath(
 
 /**
  * 查询 [uri] 对应的文件绝对路经，查询不到的情况为返回 null
+ *
+ * 不是很推荐获取文件路经，因为获取到 uri 就能获得 inputStream/outputStream，就能进行
+ *
+ * 已知问题：
+ * [MediaDocumentProvider_AUTHORITY] 类型的 uri 无法获取 FilePath，虽然在高版本上 MediaStore 提供了转化的 API，但似乎也不是出于这个目的？
+ * 还有一些第三方应用提供的 uri，比如：坚果云、Google Driver 等
  */
 fun SAFHelper.absoluteFilePathOrNull(uri: Uri): String? = metadataOrNull(uri.toOkioPath())?.extra(
     MetadataExtras.FilePath::class
