@@ -14,4 +14,3 @@ modernstorage-storage = { module = "com.google.modernstorage:modernstorage-stora
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 [bundles]
-modernstorage = ["modernstorage-permissions", "modernstorage-storage"]
