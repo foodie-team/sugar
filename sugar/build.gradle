@@ -37,4 +37,5 @@ dependencies {
     implementation sharedLibs.androidx.lifecycle.service
     implementation(platform(sharedLibs.compose.bom))
     implementation(sharedLibs.compose.ui)
+    implementation(libs.bundles.modernstorage)
 }
