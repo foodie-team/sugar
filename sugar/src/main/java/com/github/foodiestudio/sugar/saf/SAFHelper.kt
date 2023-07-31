@@ -53,25 +53,7 @@ object SAFHelper : FileSystem() {
      * mimeType: extra(MimeType::class).value
      * ```
      */
-    override fun metadataOrNull(path: Path): FileMetadata? {
-        val uri = path.toUri()
-
-        // FIXME: fileSystem 并未处理 content provider 情况时的 filePath
-        // FIXME: 主要参考了 https://stackoverflow.com/questions/17546101/get-real-path-for-uri-android/61995806#61995806
-        return when (uri.authority) {
-            // Downloads 入口
-            DownloadDocumentProvider_AUTHORITY -> fetchMetadataFromDocumentProvider(
-                contentResolver, path, uri, ::queryDownloadDocumentFilePath
-            )
-
-            // 「手机名称」的入口
-            ExternalStorageDocumentProvider_AUTHORITY -> fetchMetadataFromDocumentProvider(
-                contentResolver, path, uri, ::queryExternalStorageDocumentFilePath
-            )
-
-            else -> fileSystem.metadataOrNull(path)
-        }
-    }
+    override fun metadataOrNull(path: Path): FileMetadata? = fileSystem.metadataOrNull(path)
 
     override fun appendingSink(file: Path, mustExist: Boolean): Sink =
         fileSystem.appendingSink(file, mustExist)
@@ -133,12 +115,14 @@ fun SAFHelper.mimeTypeOrNull(uri: Uri): String? = metadataOrNull(uri.toOkioPath(
 /**
  * 查询 [uri] 对应的文件绝对路经，查询不到的情况为返回 null
  *
- * 不是很推荐获取文件路经，因为获取到 uri 就能获得 inputStream/outputStream，就能进行
+ * 不是很推荐获取文件路经，因为获取到 uri 就能获得 inputStream/outputStream，就能进行，一定需要 path 的情况，
+ * 可以考虑先把文件 copy 到 cache 路径，然后完成下一步的业务处理
  *
- * 已知问题：
- * [MediaDocumentProvider_AUTHORITY] 类型的 uri 无法获取 FilePath，虽然在高版本上 MediaStore 提供了转化的 API，但似乎也不是出于这个目的？
- * 还有一些第三方应用提供的 uri，比如：坚果云、Google Driver 等
+ * 还有一些第三方应用提供的 uri，比如：坚果云、Google Driver 等。
+ *
+ * Scoped Storage 的机制也是希望保护用户的隐私，避免只是访问 File Path，取而代之的是 DocumentFile
  */
+@Deprecated("scoped storage 基本上是拿不到路径的，请使用 DocumentFile 来代替")
 fun SAFHelper.absoluteFilePathOrNull(uri: Uri): String? = metadataOrNull(uri.toOkioPath())?.extra(
     MetadataExtras.FilePath::class
 )?.value
@@ -149,63 +133,3 @@ fun SAFHelper.absoluteFilePathOrNull(uri: Uri): String? = metadataOrNull(uri.toO
  */
 fun SAFHelper.displayNameOrNull(uri: Uri): String? =
     metadataOrNull(uri.toOkioPath())?.extra(MetadataExtras.DisplayName::class)?.value
-
-internal fun fetchMetadataFromDocumentProvider(
-    contentResolver: ContentResolver,
-    path: Path,
-    uri: Uri,
-    filePathQuery: (ContentResolver, Uri) -> String?
-): FileMetadata? {
-    val cursor = contentResolver.query(
-        uri,
-        arrayOf(
-            DocumentsContract.Document.COLUMN_LAST_MODIFIED,
-            DocumentsContract.Document.COLUMN_DISPLAY_NAME,
-            DocumentsContract.Document.COLUMN_MIME_TYPE,
-            DocumentsContract.Document.COLUMN_SIZE
-        ),
-        null,
-        null,
-        null
-    ) ?: return null
-
-    cursor.use { cursor ->
-        if (!cursor.moveToNext()) {
-            return null
-        }
-
-        // DocumentsContract.Document.COLUMN_LAST_MODIFIED
-        val lastModifiedTime = cursor.getLong(0)
-        // DocumentsContract.Document.COLUMN_DISPLAY_NAME
-        val displayName = cursor.getString(1)
-        // DocumentsContract.Document.COLUMN_MIME_TYPE
-        val mimeType = cursor.getString(2)
-        // DocumentsContract.Document.COLUMN_SIZE
-        val size = cursor.getLong(3)
-
-        val filePath = filePathQuery(contentResolver, uri)
-
-        val isFolder = mimeType == DocumentsContract.Document.MIME_TYPE_DIR ||
-                mimeType == DocumentsContract.Root.MIME_TYPE_ITEM
-
-        return FileMetadata(
-            isRegularFile = !isFolder,
-            isDirectory = isFolder,
-            symlinkTarget = null,
-            size = size,
-            createdAtMillis = null,
-            lastModifiedAtMillis = lastModifiedTime,
-            lastAccessedAtMillis = null,
-            extras = mutableMapOf(
-                Path::class to path,
-                Uri::class to uri,
-                MetadataExtras.DisplayName::class to MetadataExtras.DisplayName(displayName),
-                MetadataExtras.MimeType::class to MetadataExtras.MimeType(mimeType),
-            ).also {
-                if (filePath != null) {
-                    it[MetadataExtras.FilePath::class] = MetadataExtras.FilePath(filePath)
-                }
-            }
-        )
-    }
-}
