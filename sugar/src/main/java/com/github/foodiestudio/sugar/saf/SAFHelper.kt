@@ -4,13 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.ContentResolver
 import android.net.Uri
-import android.provider.DocumentsContract
-import com.github.foodiestudio.sugar.saf.MediaStoreHelper.MediaDocumentProvider_AUTHORITY
+import com.github.foodiestudio.sugar.ExperimentalSugarApi
 import com.google.modernstorage.permissions.StoragePermissions
 import com.google.modernstorage.storage.AndroidFileSystem
 import com.google.modernstorage.storage.MetadataExtras
 import com.google.modernstorage.storage.toOkioPath
-import com.google.modernstorage.storage.toUri
 import okio.FileHandle
 import okio.FileMetadata
 import okio.FileSystem
@@ -21,11 +19,11 @@ import okio.Sink
 import okio.Source
 import java.io.File
 
-
 /**
  * SAF 相关, 使用前记得先初始化
  */
 @SuppressLint("StaticFieldLeak")
+@ExperimentalSugarApi
 object SAFHelper : FileSystem() {
     internal lateinit var fileSystem: AndroidFileSystem
 
@@ -98,16 +96,19 @@ object SAFHelper : FileSystem() {
     override fun source(file: Path): Source = fileSystem.source(file)
 }
 
+@ExperimentalSugarApi
 fun SAFHelper.copy(source: Uri, dest: File) {
     copy(source.toOkioPath(), dest.toOkioPath())
 }
 
+@ExperimentalSugarApi
 fun SAFHelper.metadataOrNull(uri: Uri): FileMetadata? = metadataOrNull(uri.toOkioPath())
 
 /**
  * 查询 [uri] 对应的 MimeType，查询不到的情况为返回 null
  * 不同 Android 版本所能识别的类型是不同的，例如: 字体文件 `font/ttf` 在低版本会被当作 `application/octet-stream`
  */
+@ExperimentalSugarApi
 fun SAFHelper.mimeTypeOrNull(uri: Uri): String? = metadataOrNull(uri.toOkioPath())?.extra(
     MetadataExtras.MimeType::class
 )?.value
@@ -122,6 +123,7 @@ fun SAFHelper.mimeTypeOrNull(uri: Uri): String? = metadataOrNull(uri.toOkioPath(
  *
  * Scoped Storage 的机制也是希望保护用户的隐私，避免只是访问 File Path，取而代之的是 DocumentFile
  */
+@OptIn(ExperimentalSugarApi::class)
 @Deprecated("scoped storage 基本上是拿不到路径的，请使用 DocumentFile 来代替")
 fun SAFHelper.absoluteFilePathOrNull(uri: Uri): String? = metadataOrNull(uri.toOkioPath())?.extra(
     MetadataExtras.FilePath::class
@@ -131,5 +133,6 @@ fun SAFHelper.absoluteFilePathOrNull(uri: Uri): String? = metadataOrNull(uri.toO
  * 查询 [uri] 对应的文件名，查询不到的情况为返回 null
  * 可能会返回的是一个 id，而非真实的文件名，另一种
  */
+@ExperimentalSugarApi
 fun SAFHelper.displayNameOrNull(uri: Uri): String? =
     metadataOrNull(uri.toOkioPath())?.extra(MetadataExtras.DisplayName::class)?.value

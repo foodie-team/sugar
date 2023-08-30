@@ -4,11 +4,13 @@ import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
+import com.github.foodiestudio.sugar.ExperimentalSugarApi
 import java.io.File
 
 /**
  * 使用前需确保 [SAFHelper] 初始化过
  */
+@ExperimentalSugarApi
 object MediaStoreHelper {
 
     internal const val MediaDocumentProvider_AUTHORITY = "com.android.providers.media.documents"
