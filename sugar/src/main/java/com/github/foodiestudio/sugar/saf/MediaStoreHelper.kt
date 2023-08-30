@@ -8,6 +8,15 @@ import com.github.foodiestudio.sugar.ExperimentalSugarApi
 import java.io.File
 
 /**
+ * 特指 **共享的** (images, audio files, videos) 这三类文件，这三类属于强用户隐私的文件，Android 版本越高，受限越多，
+ * 也就是需要更多的用户授权
+ *
+ * READ_EXTERNAL_STORAGE when accessing other apps' files on Android 11 (API level 30) or higher
+ *
+ * READ_EXTERNAL_STORAGE or WRITE_EXTERNAL_STORAGE when accessing other apps' files on Android 10 (API level 29)
+ *
+ * Permissions are required for all files on Android 9 (API level 28) or lower
+ *
  * 使用前需确保 [SAFHelper] 初始化过
  */
 @ExperimentalSugarApi
