@@ -14,8 +14,7 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("sharedLibs") {
-            from("io.github.foodiestudio:libs-versions:2023.01.00")
-            version("lifecycle", "2.6.1")
+            from("io.github.foodiestudio:libs-versions:2023.04.01")
         }
     }
 }

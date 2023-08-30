@@ -1,16 +1,12 @@
 [versions]
 # langauge and platform
-kotlin = "1.8.0"
 modernstorage = "1.0.0-alpha06"
-okio = "3.4.0"
 
 [plugins]
 compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.11.0" }
 
 [libraries]
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref = "kotlin" }
 modernstorage-permissions = { module = "com.google.modernstorage:modernstorage-permissions", version.ref = "modernstorage" }
 modernstorage-storage = { module = "com.google.modernstorage:modernstorage-storage", version.ref = "modernstorage" }
-okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 [bundles]
