@@ -1,8 +1,8 @@
 package com.github.foodiestudio.sugar.saf
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.ContentResolver
+import android.content.Context
 import android.net.Uri
 import com.github.foodiestudio.sugar.ExperimentalSugarApi
 import com.google.modernstorage.permissions.StoragePermissions
@@ -34,10 +34,11 @@ object SAFHelper : FileSystem() {
     /**
      * 初始化
      */
-    fun init(application: Application) {
-        fileSystem = AndroidFileSystem(application)
-        storagePermissions = StoragePermissions(application)
-        contentResolver = application.contentResolver
+    fun init(context: Context) {
+        val appContext = context.applicationContext
+        fileSystem = AndroidFileSystem(appContext)
+        storagePermissions = StoragePermissions(appContext)
+        contentResolver = appContext.contentResolver
     }
 
     override fun copy(source: Path, target: Path) {
