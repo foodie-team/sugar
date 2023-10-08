@@ -28,4 +28,5 @@ dependencies {
     implementation(libs.modernstorage.storage)
     api(libs.modernstorage.permissions)
     api(sharedLibs.okio)
+    implementation(libs.documentfile)
 }

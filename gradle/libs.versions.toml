@@ -1,6 +1,7 @@
 [versions]
 # langauge and platform
 modernstorage = "1.0.0-alpha06"
+documentfile = "1.0.1"
 
 [plugins]
 compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.11.0" }
@@ -8,5 +9,6 @@ compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-val
 [libraries]
 modernstorage-permissions = { module = "com.google.modernstorage:modernstorage-permissions", version.ref = "modernstorage" }
 modernstorage-storage = { module = "com.google.modernstorage:modernstorage-storage", version.ref = "modernstorage" }
+documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
 
 [bundles]
