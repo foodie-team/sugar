@@ -1,10 +1,12 @@
 package com.github.foodiestudio.sugar.saf
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import com.github.foodiestudio.sugar.ExperimentalSugarApi
+import com.google.modernstorage.storage.AndroidFileSystem
 import java.io.File
 
 /**
@@ -24,18 +26,19 @@ object MediaStoreHelper {
 
     internal const val MediaDocumentProvider_AUTHORITY = "com.android.providers.media.documents"
 
+    @SuppressLint("StaticFieldLeak")
+    private val androidFileSystem: AndroidFileSystem = SAFHelper.fileSystem as AndroidFileSystem
+
     fun createMediaStoreUri(
         filename: String,
         collection: Uri = MediaStore.Files.getContentUri("external"),
         directory: String?
-    ): Uri? = SAFHelper.fileSystem.createMediaStoreUri(filename, collection, directory)
+    ): Uri? = androidFileSystem.createMediaStoreUri(filename, collection, directory)
 
-    suspend fun scanUri(uri: Uri, mimeType: String): Uri? =
-        SAFHelper.fileSystem.scanUri(uri, mimeType)
+    suspend fun scanUri(uri: Uri, mimeType: String): Uri? = androidFileSystem.scanUri(uri, mimeType)
 
     suspend fun scanFile(file: File, mimeType: String): Uri? =
-        SAFHelper.fileSystem.scanFile(file, mimeType)
-
+        androidFileSystem.scanFile(file, mimeType)
 
     internal fun getDisplayName(contentResolver: ContentResolver, uri: Uri?): String? {
         var cursor: Cursor? = null

@@ -1,12 +1,10 @@
 package com.github.foodiestudio.sugar.saf
 
-import com.github.foodiestudio.sugar.ExperimentalSugarApi
 import com.google.modernstorage.permissions.StoragePermissions
 
 /**
  * [请求权限查看](https://google.github.io/modernstorage/permissions/#request-storage-permissions)
  */
-@OptIn(ExperimentalSugarApi::class)
 fun SAFHelper.hasReadAccessBySelf(types: List<StoragePermissions.FileType>): Boolean =
     storagePermissions.hasAccess(
         StoragePermissions.Action.READ,
@@ -18,7 +16,6 @@ fun SAFHelper.hasReadAccessBySelf(types: List<StoragePermissions.FileType>): Boo
  * 有写权限自然有读权限
  * [请求权限查看](https://google.github.io/modernstorage/permissions/#request-storage-permissions)
  */
-@OptIn(ExperimentalSugarApi::class)
 fun SAFHelper.hasWriteAccessBySelf(types: List<StoragePermissions.FileType>): Boolean =
     storagePermissions.hasAccess(
         StoragePermissions.Action.READ_AND_WRITE,
@@ -29,7 +26,6 @@ fun SAFHelper.hasWriteAccessBySelf(types: List<StoragePermissions.FileType>): Bo
 /**
  * [请求权限查看](https://google.github.io/modernstorage/permissions/#request-storage-permissions)
  */
-@OptIn(ExperimentalSugarApi::class)
 fun SAFHelper.hasReadAccessByAllApps(types: List<StoragePermissions.FileType>): Boolean =
     storagePermissions.hasAccess(
         StoragePermissions.Action.READ,
@@ -41,7 +37,6 @@ fun SAFHelper.hasReadAccessByAllApps(types: List<StoragePermissions.FileType>): 
  * 有写权限自然有读权限
  * [请求权限查看](https://google.github.io/modernstorage/permissions/#request-storage-permissions)
  */
-@OptIn(ExperimentalSugarApi::class)
 fun SAFHelper.hasWriteAccessByAllApps(types: List<StoragePermissions.FileType>): Boolean =
     storagePermissions.hasAccess(
         StoragePermissions.Action.READ_AND_WRITE,

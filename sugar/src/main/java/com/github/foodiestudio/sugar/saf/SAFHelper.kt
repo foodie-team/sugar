@@ -22,7 +22,6 @@ import java.io.File
  * SAF 相关, 使用前记得先初始化
  */
 @SuppressLint("StaticFieldLeak")
-@ExperimentalSugarApi
 object SAFHelper {
     // okio 定义的 FileSystem 接口
     lateinit var fileSystem: FileSystem
@@ -53,18 +52,15 @@ object SAFHelper {
     }
 }
 
-@ExperimentalSugarApi
 fun SAFHelper.copy(source: Uri, dest: File) =
     fileSystem.copy(source.toOkioPath(), dest.toOkioPath())
 
-@ExperimentalSugarApi
 fun SAFHelper.metadataOrNull(uri: Uri): FileMetadata? = fileSystem.metadataOrNull(uri.toOkioPath())
 
 /**
  * 查询 [uri] 对应的 MimeType，查询不到的情况为返回 null
  * 不同 Android 版本所能识别的类型是不同的，例如: 字体文件 `font/ttf` 在低版本会被当作 `application/octet-stream`
  */
-@ExperimentalSugarApi
 fun SAFHelper.mimeTypeOrNull(uri: Uri): String? =
     fileSystem.metadataOrNull(uri.toOkioPath())?.extra(
         MetadataExtras.MimeType::class
@@ -74,7 +70,6 @@ fun SAFHelper.mimeTypeOrNull(uri: Uri): String? =
  * 查询 [uri] 对应的文件名，查询不到的情况为返回 null
  * 可能会返回的是一个 id，而非真实的文件名，另一种
  */
-@ExperimentalSugarApi
 fun SAFHelper.displayNameOrNull(uri: Uri): String? =
     fileSystem.metadataOrNull(uri.toOkioPath())?.extra(MetadataExtras.DisplayName::class)?.value
 
