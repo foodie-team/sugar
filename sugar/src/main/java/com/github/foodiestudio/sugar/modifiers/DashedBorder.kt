@@ -1,9 +1,7 @@
 package com.github.foodiestudio.sugar.modifiers
 
-import androidx.annotation.Px
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -11,23 +9,21 @@ import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.node.DrawModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 
 @ExperimentalComposeUiApi
-fun Modifier.dashedBorder(strokeWidth: Dp, color: Color, cornerRadiusDp: Dp): Modifier = composed {
-    val density = LocalDensity.current
+fun Modifier.dashedBorder(strokeWidth: Dp, color: Color, cornerRadius: Dp): Modifier =
     this then DashedBorderElement(
         color = color,
-        strokeWidth = density.run { strokeWidth.toPx() },
-        cornerRadius = density.run { cornerRadiusDp.toPx() })
-}
+        strokeWidth = strokeWidth,
+        cornerRadius = cornerRadius
+    )
 
 @ExperimentalComposeUiApi
 private data class DashedBorderElement(
-    val strokeWidth: Float,
+    val strokeWidth: Dp,
     val color: Color,
-    val cornerRadius: Float
+    val cornerRadius: Dp
 ) : ModifierNodeElement<DashedBorderNode>(inspectorInfo = {}) {
     override fun create(): DashedBorderNode = DashedBorderNode(
         color = color,
@@ -46,21 +42,19 @@ private data class DashedBorderElement(
 @ExperimentalComposeUiApi
 private class DashedBorderNode(
     var color: Color,
-    @Px
-    var strokeWidth: Float,
-    @Px
-    var cornerRadius: Float
+    var strokeWidth: Dp,
+    var cornerRadius: Dp
 ) : DrawModifierNode, Modifier.Node() {
 
     override fun ContentDrawScope.draw() {
         val stroke = Stroke(
-            width = strokeWidth,
+            width = strokeWidth.toPx(),
             pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 20f), 10f)
         )
         drawRoundRect(
             color = color,
             style = stroke,
-            cornerRadius = CornerRadius(cornerRadius)
+            cornerRadius = CornerRadius(cornerRadius.toPx())
         )
         drawContent()
     }
