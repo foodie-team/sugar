@@ -1,4 +1,4 @@
-package com.github.foodiestudio.sugar.draw
+package com.github.foodiestudio.sugar.modifiers
 
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.Stable
