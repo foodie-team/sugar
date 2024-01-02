@@ -1,4 +1,4 @@
-package com.github.foodiestudio.sugar.layout
+package com.github.foodiestudio.sugar.modifiers
 
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredHeightIn
