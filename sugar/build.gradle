@@ -36,6 +36,7 @@ dependencies {
     implementation libs.kotlin.stdlib
     implementation sharedLibs.androidx.lifecycle.service
     implementation(platform(sharedLibs.compose.bom))
+    implementation(sharedLibs.compose.foundation)
     implementation(sharedLibs.compose.ui)
     implementation(libs.modernstorage.storage)
     api(libs.modernstorage.permissions)
