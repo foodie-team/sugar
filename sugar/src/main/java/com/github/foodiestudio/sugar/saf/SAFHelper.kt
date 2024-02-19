@@ -18,10 +18,9 @@ import okio.Path
 import okio.Path.Companion.toOkioPath
 import java.io.File
 
-/**
- * SAF 相关, 使用前记得先初始化
- */
+// TODO: SAF 主要指的是系统提供的一整套带界面的『打开文件的』解决方案，这里名字叫 SAFHelper 有点不妥，因为并没有对系统的这套流程有所干预
 @SuppressLint("StaticFieldLeak")
+@Deprecated("use AppFileHelper", level = DeprecationLevel.WARNING)
 object SAFHelper {
     // okio 定义的 FileSystem 接口
     lateinit var fileSystem: FileSystem

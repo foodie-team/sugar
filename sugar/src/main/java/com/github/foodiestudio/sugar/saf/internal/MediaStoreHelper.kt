@@ -1,4 +1,4 @@
-package com.github.foodiestudio.sugar.saf
+package com.github.foodiestudio.sugar.saf.internal
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import com.github.foodiestudio.sugar.ExperimentalSugarApi
+import com.github.foodiestudio.sugar.saf.SAFHelper
 import com.google.modernstorage.storage.AndroidFileSystem
 import java.io.File
 

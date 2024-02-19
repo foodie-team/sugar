@@ -1,4 +1,4 @@
-package com.github.foodiestudio.sugar.saf
+package com.github.foodiestudio.sugar.saf.ext
 
 import android.content.Context
 import android.os.Environment
