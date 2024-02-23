@@ -7,6 +7,7 @@ import android.os.storage.StorageManager
 import androidx.annotation.RequiresApi
 import androidx.annotation.WorkerThread
 import com.github.foodiestudio.sugar.ExperimentalSugarApi
+import com.github.foodiestudio.sugar.storage.filesystem.FileSystemCompat
 import com.google.modernstorage.storage.AndroidFileSystem
 import okio.FileHandle
 import okio.FileSystem
@@ -46,19 +47,7 @@ class AppFileHelper(private val applicationContext: Context) {
         applicationContext.getSystemService(StorageManager::class.java)!!
 
     // 基于 okio 风格的 file path 操作文件
-    val fileSystem: FileSystem =
-        object : ForwardingFileSystem(AndroidFileSystem(applicationContext)) {
-            override fun createDirectory(dir: Path, mustCreate: Boolean) =
-                SYSTEM.createDirectory(dir, mustCreate)
-
-            override fun atomicMove(source: Path, target: Path) = SYSTEM.atomicMove(source, target)
-
-            override fun openReadOnly(file: Path): FileHandle = SYSTEM.openReadOnly(file)
-
-            override fun openReadWrite(
-                file: Path, mustCreate: Boolean, mustExist: Boolean
-            ): FileHandle = SYSTEM.openReadWrite(file, mustCreate, mustExist)
-        }
+    val fileSystem: FileSystem = FileSystemCompat(applicationContext)
 
     fun requireFilesDir(sensitive: Boolean): File = if (sensitive) {
         internalRoot
