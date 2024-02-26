@@ -1,4 +1,4 @@
-package com.github.foodiestudio.sugar.storage.external
+package com.github.foodiestudio.sugar.storage.filesystem.media
 
 import android.content.ContentResolver
 import android.content.ContentUris
@@ -95,7 +95,7 @@ class MediaStoreUpdateBuilder(private val resolver: ContentResolver) {
         val newSongDetails = ContentValues().apply {
             builder(this)
         }
-        val selection = "${MediaStore.Audio.Media._ID} = ?"
+        val selection = "${MediaStore.MediaColumns._ID} = ?"
         val selectionArgs = arrayOf(id.toString())
         return resolver.update(
             mediaUri,

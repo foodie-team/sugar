@@ -28,5 +28,4 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Sugar"
 include(":sugar")

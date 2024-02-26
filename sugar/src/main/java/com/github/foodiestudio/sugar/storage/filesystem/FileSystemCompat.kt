@@ -2,6 +2,9 @@ package com.github.foodiestudio.sugar.storage.filesystem
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.github.foodiestudio.sugar.storage.filesystem.media.MediaFileCompat
 import okio.FileHandle
 import okio.FileMetadata
 import okio.FileSystem
@@ -26,7 +29,8 @@ internal class FileSystemCompat(context: Context) : FileSystem() {
 
     // TODO(Jiangc): 有些实现是和  DocumentFileSystem 一样的
     // 针对处理 MediaStore 相关的
-    private val mediaFileSystem = MediaFileSystem(context)
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private val mediaFileSystem = MediaFileCompat(context)
 
     // 应用的专属目录下的文件，基于 file 的 path
     private val appFileSystem = SYSTEM
