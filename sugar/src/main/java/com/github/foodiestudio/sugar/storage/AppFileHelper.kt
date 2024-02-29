@@ -2,6 +2,7 @@ package com.github.foodiestudio.sugar.storage
 
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.storage.StorageManager
@@ -174,5 +175,14 @@ class AppFileHelper(private val applicationContext: Context) {
         applicationContext.contentResolver.openFileDescriptor(documentUri, "r")?.use {
             Os.readlink("/proc/self/fd/${it.fd}")
         }!!
+    }
+
+    // 在设备重启后保留对文件的访问权限并提供更出色的用户体验，您的应用可以“获取”系统提供的永久性 URI 访问权限
+    fun takePersistableUriPermission(documentUri: Uri) {
+        val contentResolver = applicationContext.contentResolver
+
+        val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        contentResolver.takePersistableUriPermission(documentUri, takeFlags)
     }
 }

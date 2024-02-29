@@ -20,33 +20,7 @@ import java.io.IOException
  *
  * 参考：https://developer.android.com/training/data-storage/shared/documents-files
  */
-internal class DocumentFileSystem(private val context: Context) : FileSystem() {
-    private val contentResolver = context.contentResolver
-
-    private fun Path.toUri(): Uri {
-        val str = this.toString()
-
-        if (str.startsWith("content:/")) {
-            return Uri.parse(str.replace("content:/", "content://"))
-        }
-
-        return Uri.parse(str)
-    }
-
-    override fun appendingSink(file: Path, mustExist: Boolean): Sink {
-        val uri = file.toUri()
-        if (!mustExist) {
-            throw IOException("Appending on an nonexistent path isn't supported ($file)")
-        }
-        val outputStream = contentResolver.openOutputStream(uri, "a")
-
-        if (outputStream == null) {
-            throw IOException("Couldn't open an OutputStream ($file)")
-        } else {
-            return outputStream.sink()
-        }
-    }
-
+internal class DocumentFileSystem(private val context: Context) : SharedFileSystem(context) {
     /**
      * 如果都是 Document uri 的话，倒是可以。其他情况不行。
      * workaround 的方式是，先通过 copy，然后再删除源文件
@@ -74,15 +48,8 @@ internal class DocumentFileSystem(private val context: Context) : FileSystem() {
         )
     }
 
-    override fun canonicalize(path: Path): Path =
-        throw UnsupportedOperationException("Paths can't be canonical in AndroidFileSystem")
-
     override fun createDirectory(dir: Path, mustCreate: Boolean) {
         TODO("Please use TreeDocumentFile.createDirectory(dirName)")
-    }
-
-    override fun createSymlink(source: Path, target: Path) {
-        TODO("Not yet implemented")
     }
 
     override fun delete(path: Path, mustExist: Boolean) {
@@ -104,17 +71,16 @@ internal class DocumentFileSystem(private val context: Context) : FileSystem() {
             it.uri.toOkioPath()
         }!!
 
-    override fun listOrNull(dir: Path): List<Path>? = runCatching { list(dir) }.getOrNull()
-
     private fun fetchMetadataFromDocumentProvider(uri: Uri): FileMetadata? {
+        val array = arrayOf(
+            DocumentsContract.Document.COLUMN_LAST_MODIFIED,
+            DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+            DocumentsContract.Document.COLUMN_MIME_TYPE,
+            DocumentsContract.Document.COLUMN_SIZE
+        )
         val cursor = contentResolver.query(
             uri,
-            arrayOf(
-                DocumentsContract.Document.COLUMN_LAST_MODIFIED,
-                DocumentsContract.Document.COLUMN_DISPLAY_NAME,
-                DocumentsContract.Document.COLUMN_MIME_TYPE,
-                DocumentsContract.Document.COLUMN_SIZE
-            ),
+            array,
             null,
             null,
             null
@@ -126,13 +92,13 @@ internal class DocumentFileSystem(private val context: Context) : FileSystem() {
             }
 
             // DocumentsContract.Document.COLUMN_LAST_MODIFIED
-            val lastModifiedTime = it.getLong(0)
+            val lastModifiedTime = it.getLong(array.indexOf(DocumentsContract.Document.COLUMN_LAST_MODIFIED))
             // DocumentsContract.Document.COLUMN_DISPLAY_NAME
-            val displayName = it.getString(1)
+            val displayName = it.getString(array.indexOf(DocumentsContract.Document.COLUMN_DISPLAY_NAME))
             // DocumentsContract.Document.COLUMN_MIME_TYPE
-            val mimeType = it.getString(2)
+            val mimeType = it.getString(array.indexOf(DocumentsContract.Document.COLUMN_MIME_TYPE))
             // DocumentsContract.Document.COLUMN_SIZE
-            val size = it.getLong(3)
+            val size = it.getLong(array.indexOf(DocumentsContract.Document.COLUMN_SIZE))
 
             val isFolder = mimeType == DocumentsContract.Document.MIME_TYPE_DIR ||
                     mimeType == DocumentsContract.Root.MIME_TYPE_ITEM
@@ -160,41 +126,6 @@ internal class DocumentFileSystem(private val context: Context) : FileSystem() {
             fetchMetadataFromDocumentProvider(uri)
         } else {
             TODO("unsupported path: $path, please use MediaFile")
-        }
-    }
-
-    override fun openReadOnly(file: Path): FileHandle {
-        TODO("Not yet implemented")
-    }
-
-    // maybe can implement in this way: https://stackoverflow.com/questions/28897329/documentfile-randomaccessfile
-    override fun openReadWrite(file: Path, mustCreate: Boolean, mustExist: Boolean): FileHandle {
-        TODO("Not yet implemented")
-    }
-
-    override fun sink(file: Path, mustCreate: Boolean): Sink {
-        if (mustCreate) {
-            throw IOException("Path creation isn't supported ($file)")
-        }
-
-        val uri = file.toUri()
-        val outputStream = contentResolver.openOutputStream(uri)
-
-        if (outputStream == null) {
-            throw IOException("Couldn't open an OutputStream ($file)")
-        } else {
-            return outputStream.sink()
-        }
-    }
-
-    override fun source(file: Path): Source {
-        val uri = file.toUri()
-        val inputStream = contentResolver.openInputStream(uri)
-
-        if (inputStream == null) {
-            throw IOException("Couldn't open an InputStream ($file)")
-        } else {
-            return inputStream.source()
         }
     }
 }
