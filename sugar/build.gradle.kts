@@ -2,6 +2,7 @@
 plugins {
     id("foodiestudio.android.library.compose")
     alias(libs.plugins.compatibility.validator)
+    id("maven-publish")
 }
 
 android {
@@ -31,4 +32,17 @@ dependencies {
 
     // TODO(Jiangc): remove
     implementation(libs.modernstorage.storage)
+}
+
+group = "com.github.foodiestudio"
+version = extra["publish.version"].toString()
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }
