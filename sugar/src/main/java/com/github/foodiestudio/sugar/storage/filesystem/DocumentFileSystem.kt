@@ -47,16 +47,38 @@ internal class DocumentFileSystem(private val context: Context) : FileSystem() {
         }
     }
 
+    /**
+     * 如果都是 Document uri 的话，倒是可以。其他情况不行。
+     * workaround 的方式是，先通过 copy，然后再删除源文件
+     *
+     * @param source 源文件，非文件夹类型
+     * @param target 目标文件夹
+     */
     override fun atomicMove(source: Path, target: Path) {
-        // maybe can implement by [DocumentsContract.moveDocument]
-        TODO("Not yet implemented")
+        require(
+            DocumentFile.isDocumentUri(context, source.toUri()) && DocumentFile.isDocumentUri(
+                context,
+                target.toUri()
+            )
+        ) {
+            "source and target must be Document uri"
+        }
+        val sourceDocument = DocumentFile.fromSingleUri(context, source.toUri())!!
+        val targetDocumentFolder = DocumentFile.fromTreeUri(context, target.toUri())!!
+
+        DocumentsContract.moveDocument(
+            contentResolver,
+            sourceDocument.uri,
+            sourceDocument.parentFile!!.uri,
+            targetDocumentFolder.uri
+        )
     }
 
     override fun canonicalize(path: Path): Path =
         throw UnsupportedOperationException("Paths can't be canonical in AndroidFileSystem")
 
     override fun createDirectory(dir: Path, mustCreate: Boolean) {
-        TODO("Not yet implemented")
+        TODO("Please use TreeDocumentFile.createDirectory(dirName)")
     }
 
     override fun createSymlink(source: Path, target: Path) {
@@ -77,45 +99,12 @@ internal class DocumentFileSystem(private val context: Context) : FileSystem() {
         }
     }
 
-    override fun list(dir: Path): List<Path> = list(dir, throwOnFailure = true)!!
+    override fun list(dir: Path): List<Path> =
+        DocumentFile.fromTreeUri(context, dir.toUri())?.listFiles()?.map {
+            it.uri.toOkioPath()
+        }!!
 
-    override fun listOrNull(dir: Path): List<Path>? = list(dir, throwOnFailure = false)
-
-    private fun list(dir: Path, throwOnFailure: Boolean): List<Path>? {
-        // TODO: Verify path is a directory
-        val rootUri = dir.toUri()
-        val documentId = DocumentsContract.getDocumentId(rootUri)
-        val treeUri = DocumentsContract.buildChildDocumentsUriUsingTree(rootUri, documentId)
-
-        val cursor = contentResolver.query(
-            treeUri,
-            arrayOf(DocumentsContract.Document.COLUMN_DOCUMENT_ID),
-            null,
-            null,
-            null,
-            null
-        )
-
-        if (cursor == null) {
-            if (throwOnFailure) {
-                throw IOException("failed to list $dir")
-            } else {
-                return null
-            }
-        }
-
-        val result = mutableListOf<Path>()
-
-        cursor.use {
-            while (it.moveToNext()) {
-                result.add(
-                    DocumentsContract.buildDocumentUriUsingTree(rootUri, documentId).toOkioPath()
-                )
-            }
-        }
-
-        return result
-    }
+    override fun listOrNull(dir: Path): List<Path>? = runCatching { list(dir) }.getOrNull()
 
     private fun fetchMetadataFromDocumentProvider(uri: Uri): FileMetadata? {
         val cursor = contentResolver.query(
@@ -170,7 +159,7 @@ internal class DocumentFileSystem(private val context: Context) : FileSystem() {
         return if (DocumentFile.isDocumentUri(context, uri)) {
             fetchMetadataFromDocumentProvider(uri)
         } else {
-            TODO("unsupported path: $path")
+            TODO("unsupported path: $path, please use MediaFile")
         }
     }
 
