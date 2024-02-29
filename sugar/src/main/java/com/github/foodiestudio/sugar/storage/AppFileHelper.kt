@@ -2,17 +2,16 @@ package com.github.foodiestudio.sugar.storage
 
 import android.app.Application
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.os.storage.StorageManager
+import android.system.Os
 import androidx.annotation.RequiresApi
 import androidx.annotation.WorkerThread
+import androidx.documentfile.provider.DocumentFile
 import com.github.foodiestudio.sugar.ExperimentalSugarApi
 import com.github.foodiestudio.sugar.storage.filesystem.FileSystemCompat
-import com.google.modernstorage.storage.AndroidFileSystem
-import okio.FileHandle
 import okio.FileSystem
-import okio.ForwardingFileSystem
-import okio.Path
 import java.io.File
 import java.io.FileOutputStream
 
@@ -138,7 +137,7 @@ class AppFileHelper(private val applicationContext: Context) {
      * @param fileName 文件名，例如，Foo.text，不能是 /Foo/Bar.text 这类包含路径的文件名
      */
     @WorkerThread
-    @Deprecated("没什么实际用处的API")
+    @Deprecated("没什么实际用处的API", level = DeprecationLevel.HIDDEN)
     fun writeSensitiveFile(
         fileName: String,
         action: (FileOutputStream) -> Unit
@@ -152,9 +151,28 @@ class AppFileHelper(private val applicationContext: Context) {
      * [writeSensitiveFile] 的读取版本，如果本身不存在这个文件的话，顺带会创建。
      */
     @WorkerThread
-    @Deprecated("没什么实际用处的API")
+    @Deprecated("没什么实际用处的API", level = DeprecationLevel.HIDDEN)
     fun readSensitiveFile(fileName: String): String {
         return applicationContext.openFileInput(fileName).bufferedReader().readLines()
             .joinToString("\n")
+    }
+
+    /**
+     * 参考自 https://github.com/ya0211/MRepo/blob/a51c8b9fe21798902c0709d1d1bd719531d6a02f/app/src/main/kotlin/com/sanmer/mrepo/app/utils/MediaStoreUtils.kt#L59
+     *
+     * @param documentUri content://xxx/tree/abc/document/123 or content://xxx/document/123
+     */
+    // TODO: 没有进行过比较多的测试, 仅在极少数情况下使用，避免滥用，应该尽可能遵循 Scoped Storage
+    @ExperimentalSugarApi
+    fun getAbsoluteFilePath(documentUri: Uri): Result<String> = runCatching {
+        require(DocumentFile.isDocumentUri(applicationContext, documentUri))
+        // 这一步是为了什么，必须的？
+//        val targetUri = runCatching {
+//            DocumentFile.fromTreeUri(applicationContext, documentUri)?.uri
+//        }.getOrDefault(documentUri)
+
+        applicationContext.contentResolver.openFileDescriptor(documentUri, "r")?.use {
+            Os.readlink("/proc/self/fd/${it.fd}")
+        }!!
     }
 }
