@@ -9,30 +9,11 @@ import android.provider.MediaStore
 import android.util.Size
 import androidx.annotation.RequiresApi
 import com.github.foodiestudio.sugar.ExperimentalSugarApi
-import com.github.foodiestudio.sugar.storage.filesystem.MetadataExtras
 import com.github.foodiestudio.sugar.storage.filesystem.toOkioPath
 import okio.BufferedSink
 import okio.BufferedSource
 import okio.FileMetadata
 import okio.FileSystem
-
-enum class MediaStoreType {
-    Images, Audio, Video, Downloads
-}
-
-val FileMetadata.displayName: String
-    get() = extra(MetadataExtras.DisplayName::class)!!.value
-
-val FileMetadata.mimeType: String?
-    get() = extra(MetadataExtras.MimeType::class)?.value
-
-/**
- * 对于 MediaFile 来说，肯定不会为 null，否则不一定
- *
- * 注意：介于 uri 也可以写文件，所以可能真的不需要这个 API
- */
-val FileMetadata.absoluteFilePath: String?
-    get() = extra(MetadataExtras.FilePath::class)?.value
 
 // 参考自 https://github.com/anggrayudi/SimpleStorage/blob/master/storage/src/main/java/com/anggrayudi/storage/media/MediaFile.kt
 // 暂只考虑 Android 10+ 的情况
@@ -84,8 +65,15 @@ class MediaFile(context: Context, val mediaUri: Uri) {
             context: Context,
             type: MediaStoreType,
             fileName: String,
+            relativePath: String? = null,
             enablePending: Boolean = false
-        ): MediaFile = createFile(context, type, fileName, enablePending)
+        ): MediaFile = createFile(
+            context,
+            type,
+            relativePath = relativePath,
+            fileName = fileName,
+            enablePending
+        )
     }
 }
 
@@ -102,6 +90,7 @@ fun MediaFile.moveTo(newRelativePath: String) {
 private fun createFile(
     context: Context,
     type: MediaStoreType,
+    relativePath: String? = null,
     fileName: String,
     enablePending: Boolean = false,
 ): MediaFile {
@@ -136,6 +125,9 @@ private fun createFile(
 
     val contentValues = ContentValues().apply {
         put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+        if (!relativePath.isNullOrEmpty()) {
+            put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
+        }
         if (enablePending) {
             put(MediaStore.MediaColumns.IS_PENDING, 1)
         }

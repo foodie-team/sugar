@@ -10,7 +10,7 @@ import android.provider.MediaStore
 import androidx.annotation.WorkerThread
 import kotlin.time.Duration
 
-class SingleMediaStoreFilterCondition<T>(
+internal class SingleMediaStoreFilterCondition<T>(
     val fieldName: String,
     val fieldValue: T,
     val operator: String
@@ -19,14 +19,14 @@ class SingleMediaStoreFilterCondition<T>(
     val selectionArgs: Array<String> get() = arrayOf(fieldValue.toString())
 }
 
-infix fun String.greaterEq(duration: Duration) =
+internal infix fun String.greaterEq(duration: Duration) =
     SingleMediaStoreFilterCondition(
         fieldName = this,
         fieldValue = duration.inWholeMilliseconds,
         operator = ">="
     )
 
-class MediaStoreColumnParser(private val cursor: Cursor) {
+internal class MediaStoreColumnParser(private val cursor: Cursor) {
     private val idColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID)
     private val nameColumn =
         cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME)
@@ -56,35 +56,7 @@ class MediaStoreColumnParser(private val cursor: Cursor) {
     val filePath: String get() = cursor.getString(dataColumn)
 }
 
-
-class MediaStoreInsertBuilder(private val resolver: ContentResolver) {
-    private val audioCollection =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Audio.Media.getContentUri(
-                MediaStore.VOLUME_EXTERNAL_PRIMARY
-            )
-        } else {
-            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        }
-
-    fun new(builder: ContentValues.() -> Unit): Uri? {
-        val newSongDetails = ContentValues().apply {
-            builder(this)
-        }
-        return resolver.insert(audioCollection, newSongDetails)
-    }
-}
-
-class MediaStoreUpdateBuilder(private val resolver: ContentResolver) {
-    private val audioCollection =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.Audio.Media.getContentUri(
-                MediaStore.VOLUME_EXTERNAL_PRIMARY
-            )
-        } else {
-            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        }
-
+internal class MediaStoreUpdateBuilder(private val resolver: ContentResolver) {
     /**
      * @param mediaUri 包含 id 的 media Store uri
      */
@@ -103,57 +75,5 @@ class MediaStoreUpdateBuilder(private val resolver: ContentResolver) {
             selection,
             selectionArgs
         )
-    }
-}
-
-class MediaStoreQueryBuilder(private val resolver: ContentResolver) {
-
-    private lateinit var filterCondition: SingleMediaStoreFilterCondition<Any>
-
-    fun <T : Any> find(condition: () -> SingleMediaStoreFilterCondition<T>) = apply {
-        // TODO: 正确处理范型
-        filterCondition = condition() as SingleMediaStoreFilterCondition<Any>
-    }
-
-    @WorkerThread
-    fun <T> collect(convert: MediaStoreColumnParser.() -> T): List<T> {
-        // TODO: 暂时写死projection
-        val projection = arrayOf(
-            MediaStore.Video.Media._ID,
-            MediaStore.Video.Media.DISPLAY_NAME,
-            MediaStore.Video.Media.DURATION,
-            MediaStore.Video.Media.SIZE
-        )
-
-        // TODO: 暂时写死projection
-        val sortOrder = "${MediaStore.Video.Media.DISPLAY_NAME} ASC"
-
-        val collection =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                MediaStore.Video.Media.getContentUri(
-                    MediaStore.VOLUME_EXTERNAL
-                )
-            } else {
-                MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-            }
-
-        val selection = filterCondition.selection
-        val selectionArgs = filterCondition.selectionArgs
-
-        val result = mutableListOf<T>()
-
-        resolver.query(
-            collection,
-            projection,
-            selection,
-            selectionArgs,
-            sortOrder
-        )?.use { cursor ->
-            val parser by lazy(LazyThreadSafetyMode.NONE) { MediaStoreColumnParser(cursor) }
-            while (cursor.moveToNext()) {
-                result.add(convert(parser))
-            }
-        }
-        return result
     }
 }
