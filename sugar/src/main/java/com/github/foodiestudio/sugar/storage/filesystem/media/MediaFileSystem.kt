@@ -2,8 +2,8 @@ package com.github.foodiestudio.sugar.storage.filesystem.media
 
 import android.content.Context
 import android.provider.MediaStore
+import com.github.foodiestudio.sugar.storage.filesystem.MetadataExtras
 import com.github.foodiestudio.sugar.storage.filesystem.SharedFileSystem
-import com.google.modernstorage.storage.MetadataExtras
 import okio.FileMetadata
 import okio.Path
 import java.io.IOException

@@ -9,8 +9,8 @@ import android.provider.MediaStore
 import android.util.Size
 import androidx.annotation.RequiresApi
 import com.github.foodiestudio.sugar.ExperimentalSugarApi
+import com.github.foodiestudio.sugar.storage.filesystem.MetadataExtras
 import com.github.foodiestudio.sugar.storage.filesystem.toOkioPath
-import com.google.modernstorage.storage.MetadataExtras
 import okio.BufferedSink
 import okio.BufferedSource
 import okio.FileMetadata

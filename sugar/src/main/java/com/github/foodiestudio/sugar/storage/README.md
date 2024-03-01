@@ -44,3 +44,6 @@ okio 的 FileSystem 的部分 API 并不适用于 Android 的 uri，对应的一
 2. 如果在 Native 要访问 File，还可以继续依赖 File path 吗？
   - 对于应用专属目录，是可以继续用的，但如果不是，还是传递 FileDescriptor 的指针来实现吧。
 
+### Thanks
+- https://github.com/google/modernstorage
+

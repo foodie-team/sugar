@@ -4,15 +4,8 @@ import android.content.Context
 import android.net.Uri
 import android.provider.DocumentsContract
 import androidx.documentfile.provider.DocumentFile
-import com.google.modernstorage.storage.MetadataExtras
-import okio.FileHandle
 import okio.FileMetadata
-import okio.FileSystem
 import okio.Path
-import okio.Sink
-import okio.Source
-import okio.sink
-import okio.source
 import java.io.IOException
 
 /**

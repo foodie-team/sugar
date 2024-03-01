@@ -52,12 +52,8 @@ android {
 dependencies {
     implementation(sharedLibs.androidx.lifecycle.service)
     implementation(sharedLibs.compose.ui)
-    api(libs.modernstorage.permissions)
     api(sharedLibs.okio)
     implementation(libs.documentfile)
-
-    // TODO(Jiangc): remove
-    implementation(libs.modernstorage.storage)
 
     if (launchAsApplication) {
         // debugOnly
