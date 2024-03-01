@@ -1,4 +1,4 @@
-import com.android.build.api.dsl.ApplicationDefaultConfig
+import com.android.build.api.dsl.LibraryDefaultConfig
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -24,15 +24,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        if (launchAsApplication) {
-            (this as ApplicationDefaultConfig).apply {
-                applicationId = "com.github.foodiestudio.sugar.app"
-                versionCode = 1
-                versionName = "1.0.0"
-                targetSdk = 33
-            }
-        } else {
-            defaultConfig.consumerProguardFiles("consumer-rules.pro")
+        if (!launchAsApplication) {
+            (this as LibraryDefaultConfig).consumerProguardFiles("consumer-rules.pro")
         }
     }
 
