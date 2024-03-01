@@ -1,9 +1,20 @@
+import com.android.build.api.dsl.ApplicationDefaultConfig
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("foodiestudio.android.library.compose")
+    // debug only
+    val launchAsApplication = false
+
+    if (launchAsApplication) {
+        id("foodiestudio.android.application.compose")
+    } else {
+        id("foodiestudio.android.library.compose")
+    }
     alias(libs.plugins.compatibility.validator)
     id("maven-publish")
 }
+
+val launchAsApplication = project.plugins.findPlugin("foodiestudio.android.library.compose") == null
 
 android {
     namespace = "com.github.foodiestudio.sugar"
@@ -12,13 +23,28 @@ android {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+
+        if (launchAsApplication) {
+            (this as ApplicationDefaultConfig).apply {
+                applicationId = "com.github.foodiestudio.sugar.app"
+                versionCode = 1
+                versionName = "1.0.0"
+                targetSdk = 33
+            }
+        } else {
+            defaultConfig.consumerProguardFiles("consumer-rules.pro")
+        }
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
-            setProguardFiles(listOf(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"))
+            setProguardFiles(
+                listOf(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+                )
+            )
         }
     }
 }
@@ -32,16 +58,24 @@ dependencies {
 
     // TODO(Jiangc): remove
     implementation(libs.modernstorage.storage)
+
+    if (launchAsApplication) {
+        // debugOnly
+        debugImplementation(sharedLibs.activity.compose)
+        debugImplementation(sharedLibs.compose.material)
+    }
 }
 
-group = "com.github.foodiestudio"
-version = extra["publish.version"].toString()
+if (!launchAsApplication) {
+    group = "com.github.foodiestudio"
+    version = extra["publish.version"].toString()
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            afterEvaluate {
-                from(components["release"])
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                afterEvaluate {
+                    from(components["release"])
+                }
             }
         }
     }
