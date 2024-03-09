@@ -51,6 +51,7 @@ dependencies {
     if (launchAsApplication) {
         // debugOnly
         debugImplementation(sharedLibs.activity.compose)
+        debugImplementation(libs.viewmodel.compose)
         debugImplementation(sharedLibs.compose.material)
     }
 }
