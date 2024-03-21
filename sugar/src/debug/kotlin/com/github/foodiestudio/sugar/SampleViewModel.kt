@@ -1,8 +1,10 @@
 package com.github.foodiestudio.sugar
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import com.github.foodiestudio.sugar.storage.AppFileHelper
+import com.github.foodiestudio.sugar.storage.filesystem.toOkioPath
 import okio.Path
 import okio.Path.Companion.toOkioPath
 
@@ -11,13 +13,30 @@ internal class SampleViewModel(application: Application) : AndroidViewModel(appl
 
     private val fileHelper = AppFileHelper(application)
 
-    var testVideoPath: Path = fileHelper.requireFilesDir(false).toOkioPath().resolve("video.mp4")
+    val testVideoPath: Path = fileHelper.requireFilesDir(false).toOkioPath().resolve("video.mp4")
 
-    var testImagePath: Path = fileHelper.requireFilesDir(false).toOkioPath().resolve("image.jpg")
+    val testImagePath: Path = fileHelper.requireFilesDir(false).toOkioPath().resolve("image.jpg")
 
-    val isPrepared: Boolean
+    val isImagePrepared: Boolean
         get() = fileHelper.fileSystem.run {
-            exists(testImagePath) && exists(testVideoPath)
+            exists(testImagePath)
         }
+
+    val isVideoPrepared: Boolean
+        get() = fileHelper.fileSystem.run {
+            exists(testVideoPath)
+        }
+
+    fun updateImagePath(uri: Uri) {
+        fileHelper.fileSystem.copy(uri.toOkioPath(), testImagePath)
+    }
+
+    fun updateVideoPath(uri: Uri) {
+        fileHelper.fileSystem.copy(uri.toOkioPath(), testVideoPath)
+    }
+
+    fun getMetadata(): String {
+        TODO()
+    }
 
 }
