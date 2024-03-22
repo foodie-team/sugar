@@ -49,14 +49,12 @@ dependencies {
     api(sharedLibs.okio)
     implementation(libs.documentfile)
 
-    if (launchAsApplication) {
-        // debugOnly
-        debugImplementation(sharedLibs.activity.compose)
-        debugImplementation(libs.viewmodel.compose)
-        debugImplementation(sharedLibs.compose.material)
-        debugImplementation(sharedLibs.coil)
-        debugImplementation(libs.coil.video)
-    }
+    // debugOnly
+    debugImplementation(sharedLibs.activity.compose)
+    debugImplementation(libs.viewmodel.compose)
+    debugImplementation(sharedLibs.compose.material)
+    debugImplementation(sharedLibs.coil)
+    debugImplementation(libs.coil.video)
 }
 
 if (!launchAsApplication) {
