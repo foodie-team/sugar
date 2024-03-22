@@ -1,3 +1,5 @@
+package com.github.foodiestudio.sugar.notification
+
 import android.content.Context
 import android.widget.Toast
 import androidx.annotation.StringRes
