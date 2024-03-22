@@ -53,6 +53,12 @@ MediaFile.create(context = context, MediaStoreType.Audio, "hello.mp3", true).let
 
 对于应用专属目录，是可以继续用的，但如果不是，还是传递 FileDescriptor 的指针来实现吧。
 
+> 如何区分 Uri？Document uri? Media uri?
+
+documentUri 的形式是 content://<provider_name>/document 这种，而 Media uri 的形式则是 content://media/.../media/1000060604。
+
+对于媒体文件的 documentUri 可以将其转化为对应的 mediaUri
+
 ### Thanks
 - https://github.com/google/modernstorage
 
