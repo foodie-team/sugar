@@ -18,9 +18,9 @@ import com.github.foodiestudio.sugar.notification.toast
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun SaveFileToDownload(viewModel: SampleViewModel) {
+internal fun SaveFileToDownload(modifier: Modifier, viewModel: SampleViewModel) {
     val context = LocalContext.current
-    Column {
+    Column(modifier) {
         ListItem(modifier = Modifier.clickable {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 viewModel.saveTextToDownload(context, "Hello world")

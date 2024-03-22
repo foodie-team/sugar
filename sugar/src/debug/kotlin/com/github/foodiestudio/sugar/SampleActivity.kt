@@ -48,7 +48,7 @@ class SampleActivity : ComponentActivity() {
 }
 
 enum class Page {
-    Home, MediaStoreTest, SaveToDownload
+    Home, MediaStoreTest, SaveToDownload, DocumentTest
 }
 
 @Composable
@@ -84,7 +84,25 @@ private fun Content(viewModel: SampleViewModel = viewModel()) {
             BackHandler {
                 page = Page.MediaStoreTest
             }
-            SaveFileToDownload(viewModel)
+            Scaffold(
+                floatingActionButton = {
+                    if (viewModel.isImagePrepared && viewModel.isVideoPrepared) {
+                        FloatingActionButton(onClick = { page = Page.DocumentTest }) {
+                            Icon(Icons.Default.ArrowForward, contentDescription = null)
+                        }
+                    }
+                },
+                content = {
+                    SaveFileToDownload(modifier = Modifier.padding(it), viewModel)
+                }
+            )
+        }
+
+        Page.DocumentTest -> {
+            BackHandler {
+                page = Page.SaveToDownload
+            }
+            SAFTest(viewModel = viewModel)
         }
     }
 }

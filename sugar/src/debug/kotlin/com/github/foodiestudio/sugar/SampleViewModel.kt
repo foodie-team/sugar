@@ -117,4 +117,9 @@ internal class SampleViewModel(application: Application) : AndroidViewModel(appl
             it.mediaUri
         }
     }
+
+    @ExperimentalSugarApi
+    fun fetchFilePathForDocumentUri(documentUri: Uri): String {
+        return fileHelper.getAbsoluteFilePath(documentUri).getOrThrow()
+    }
 }

@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.storage.StorageManager
 import android.system.Os
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.WorkerThread
 import androidx.documentfile.provider.DocumentFile
@@ -162,17 +163,23 @@ class AppFileHelper(private val applicationContext: Context) {
      * 参考自 https://github.com/ya0211/MRepo/blob/a51c8b9fe21798902c0709d1d1bd719531d6a02f/app/src/main/kotlin/com/sanmer/mrepo/app/utils/MediaStoreUtils.kt#L59
      *
      * @param documentUri content://xxx/tree/abc/document/123 or content://xxx/document/123
+     * @return 文件的绝对路径： /mnt/user/0/emulated/0/Download/ 等形式的路径
      */
-    // TODO: 没有进行过比较多的测试, 仅在极少数情况下使用，避免滥用，应该尽可能遵循 Scoped Storage
+    @Deprecated("这不是一个正经的用法，避免滥用，应该尽可能遵循 Scoped Storage。", level = DeprecationLevel.WARNING)
     @ExperimentalSugarApi
     fun getAbsoluteFilePath(documentUri: Uri): Result<String> = runCatching {
-        require(DocumentFile.isDocumentUri(applicationContext, documentUri))
-        // 这一步是为了什么，必须的？
-//        val targetUri = runCatching {
-//            DocumentFile.fromTreeUri(applicationContext, documentUri)?.uri
-//        }.getOrDefault(documentUri)
+        // 文件夹无法直接使用，需要转为对应的 uri。这里会先尝试按 TreeUri 解析，如果解析失败，则尝试按 DocumentUri 解析
+        val targetUri = runCatching {
+            // 这一步的目的
+            // documentUri: content://com.android.providers.downloads.documents/tree/msd%3A1000060615
+            // 转化为
+            // content://com.android.providers.downloads.documents/tree/msd%3A1000060615/document/msd%3A1000060615
+            DocumentFile.fromTreeUri(applicationContext, documentUri)?.uri
+        }.getOrDefault(documentUri)
 
-        applicationContext.contentResolver.openFileDescriptor(documentUri, "r")?.use {
+        Log.v("AppFileHelper", "documentUri: $documentUri \n targetUri: $targetUri")
+
+        applicationContext.contentResolver.openFileDescriptor(targetUri!!, "r")?.use {
             Os.readlink("/proc/self/fd/${it.fd}")
         }!!
     }
