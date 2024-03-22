@@ -10,14 +10,41 @@ public abstract class com/github/foodiestudio/sugar/accessibility/LifecycleAcces
 	protected fun onServiceConnected ()V
 }
 
-public final class com/github/foodiestudio/sugar/draw/MirrorKt {
-	public static final fun mirror (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
-}
-
 public final class com/github/foodiestudio/sugar/intent/CommonIntents {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/github/foodiestudio/sugar/intent/CommonIntents;
 	public final fun getHOME_SCREEN ()Landroid/content/Intent;
+}
+
+public final class com/github/foodiestudio/sugar/modifiers/ClickKt {
+	public static final fun clickableWithoutIndication (Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/Modifier;
+}
+
+public final class com/github/foodiestudio/sugar/modifiers/DashedBorderKt {
+	public static final fun dashedBorder-aa2Vgzc (Landroidx/compose/ui/Modifier;FJF)Landroidx/compose/ui/Modifier;
+}
+
+public final class com/github/foodiestudio/sugar/modifiers/MirrorKt {
+	public static final fun mirror (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
+}
+
+public final class com/github/foodiestudio/sugar/modifiers/SizeKt {
+	public static final fun forgetMinAndMaxSize (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;)Landroidx/compose/ui/Modifier;
+	public static final fun forgetMinHeight (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment$Vertical;)Landroidx/compose/ui/Modifier;
+	public static synthetic fun forgetMinHeight$default (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment$Vertical;ILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun forgetMinSize (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;)Landroidx/compose/ui/Modifier;
+	public static synthetic fun forgetMinSize$default (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;ILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun forgetMinWidth (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment$Horizontal;)Landroidx/compose/ui/Modifier;
+	public static synthetic fun forgetMinWidth$default (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment$Horizontal;ILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun overrideHeight-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
+	public static final fun overrideHeightIn-VpY3zN4 (Landroidx/compose/ui/Modifier;FF)Landroidx/compose/ui/Modifier;
+	public static final fun overrideSize-VpY3zN4 (Landroidx/compose/ui/Modifier;FF)Landroidx/compose/ui/Modifier;
+	public static final fun overrideWidth-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
+	public static final fun overrideWidthIn-VpY3zN4 (Landroidx/compose/ui/Modifier;FF)Landroidx/compose/ui/Modifier;
+}
+
+public final class com/github/foodiestudio/sugar/modifiers/ThenIfKt {
+	public static final fun thenIf (Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function1;)Landroidx/compose/ui/Modifier;
 }
 
 public final class com/github/foodiestudio/sugar/notification/ToastKtxKt {

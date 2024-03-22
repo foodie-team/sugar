@@ -24,7 +24,7 @@ private data class DashedBorderElement(
     val strokeWidth: Dp,
     val color: Color,
     val cornerRadius: Dp
-) : ModifierNodeElement<DashedBorderNode>(inspectorInfo = {}) {
+) : ModifierNodeElement<DashedBorderNode>() {
     override fun create(): DashedBorderNode = DashedBorderNode(
         color = color,
         strokeWidth = strokeWidth,

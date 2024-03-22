@@ -45,6 +45,7 @@ android {
 dependencies {
     implementation(sharedLibs.androidx.lifecycle.service)
     implementation(sharedLibs.compose.ui)
+    implementation(sharedLibs.compose.foundation)
     api(sharedLibs.okio)
     implementation(libs.documentfile)
 
