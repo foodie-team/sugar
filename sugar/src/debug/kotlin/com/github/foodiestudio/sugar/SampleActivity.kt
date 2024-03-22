@@ -2,6 +2,7 @@ package com.github.foodiestudio.sugar
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.PickVisualMediaRequest
@@ -62,10 +63,27 @@ private fun Content(viewModel: SampleViewModel = viewModel()) {
         }
 
         Page.MediaStoreTest -> {
-            MediaStoreTest(viewModel)
+            BackHandler {
+                page = Page.Home
+            }
+            Scaffold(
+                floatingActionButton = {
+                    if (viewModel.isImagePrepared && viewModel.isVideoPrepared) {
+                        FloatingActionButton(onClick = { page = Page.SaveToDownload }) {
+                            Icon(Icons.Default.ArrowForward, contentDescription = null)
+                        }
+                    }
+                },
+                content = {
+                    MediaStoreTest(modifier = Modifier.padding(it), viewModel)
+                }
+            )
         }
 
         Page.SaveToDownload -> {
+            BackHandler {
+                page = Page.MediaStoreTest
+            }
             SaveFileToDownload(viewModel)
         }
     }

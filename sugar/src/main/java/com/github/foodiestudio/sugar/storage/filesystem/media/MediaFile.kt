@@ -15,11 +15,21 @@ import okio.BufferedSource
 import okio.FileMetadata
 import okio.FileSystem
 
-// 参考自 https://github.com/anggrayudi/SimpleStorage/blob/master/storage/src/main/java/com/anggrayudi/storage/media/MediaFile.kt
-// 暂只考虑 Android 10+ 的情况
+/**
+ * 参考自 https://github.com/anggrayudi/SimpleStorage/blob/master/storage/src/main/java/com/anggrayudi/storage/media/MediaFile.kt
+ * 暂只考虑 Android 10+ 的情况
+ *
+ * @param mediaUri 主要里面记录了一个 id，修改路径以及 displayName 并不会影响这个 uri， 类似于 content://media/external_primary/images/media/1000060604
+ */
 @RequiresApi(Build.VERSION_CODES.Q)
 @ExperimentalSugarApi
 class MediaFile(context: Context, val mediaUri: Uri) {
+    init {
+        check(mediaUri.authority == MediaStore.AUTHORITY) {
+            "mediaUri authority must be ${MediaStore.AUTHORITY}, invalid uri: $mediaUri"
+        }
+    }
+
     internal val resolver = context.contentResolver
 
     private val fileSystem: FileSystem = MediaFileSystem(context)
@@ -30,6 +40,9 @@ class MediaFile(context: Context, val mediaUri: Uri) {
     val metadata: FileMetadata
         get() = fileSystem.metadata(mediaUri.toOkioPath())
 
+    /**
+     * 仅适用于视频
+     */
     fun loadThumbnail(size: Size): Bitmap {
         return resolver.loadThumbnail(mediaUri, size, null)
     }
@@ -59,7 +72,8 @@ class MediaFile(context: Context, val mediaUri: Uri) {
 
     companion object {
         /**
-         * @param enablePending 是否允许 pending 状态, 默认为 false, 可以在写入完成后调用 [releasePendingStatus]
+         * @param enablePending 是否允许 pending 状态, 默认为 false, 可以在写入完成后调用 [releasePendingStatus], 适用于对大文件的读写
+         * @param relativePath 这个只能接受对应系统媒体文件夹开头的路径，例如：Movies/XX, Pictures/XX, Downloads/XX
          */
         fun create(
             context: Context,
@@ -77,6 +91,9 @@ class MediaFile(context: Context, val mediaUri: Uri) {
     }
 }
 
+/**
+ * @param newRelativePath 这个只能接受对应媒体文件夹开头的路径，例如：Movies/XX, Pictures/XX, Downloads/XX
+ */
 @RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalSugarApi::class)
 fun MediaFile.moveTo(newRelativePath: String) {
