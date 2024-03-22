@@ -1,18 +1,8 @@
-public final class ToastKtxKt {
-	public static final fun longToast (Landroid/content/Context;I)V
-	public static final fun longToast (Landroid/content/Context;Ljava/lang/CharSequence;)V
-	public static final fun toast (Landroid/content/Context;I)V
-	public static final fun toast (Landroid/content/Context;Ljava/lang/CharSequence;)V
-}
-
-public final class com/github/foodiestudio/sugar/BuildConfig {
-	public static final field BUILD_TYPE Ljava/lang/String;
-	public static final field DEBUG Z
-	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
-	public fun <init> ()V
+public abstract interface annotation class com/github/foodiestudio/sugar/ExperimentalSugarApi : java/lang/annotation/Annotation {
 }
 
 public abstract class com/github/foodiestudio/sugar/accessibility/LifecycleAccessibilityService : android/accessibilityservice/AccessibilityService, androidx/lifecycle/LifecycleOwner {
+	public static final field $stable I
 	public fun <init> ()V
 	public fun getLifecycle ()Landroidx/lifecycle/Lifecycle;
 	public fun onCreate ()V
@@ -20,53 +10,106 @@ public abstract class com/github/foodiestudio/sugar/accessibility/LifecycleAcces
 	protected fun onServiceConnected ()V
 }
 
-public final class com/github/foodiestudio/sugar/draw/MirrorKt {
-	public static final fun mirror (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
-}
-
 public final class com/github/foodiestudio/sugar/intent/CommonIntents {
+	public static final field $stable I
 	public static final field INSTANCE Lcom/github/foodiestudio/sugar/intent/CommonIntents;
 	public final fun getHOME_SCREEN ()Landroid/content/Intent;
 }
 
-public final class com/github/foodiestudio/sugar/saf/MediaStoreHelper {
-	public static final field INSTANCE Lcom/github/foodiestudio/sugar/saf/MediaStoreHelper;
-	public final fun createMediaStoreUri (Ljava/lang/String;Landroid/net/Uri;Ljava/lang/String;)Landroid/net/Uri;
-	public static synthetic fun createMediaStoreUri$default (Lcom/github/foodiestudio/sugar/saf/MediaStoreHelper;Ljava/lang/String;Landroid/net/Uri;Ljava/lang/String;ILjava/lang/Object;)Landroid/net/Uri;
-	public final fun scanFile (Ljava/io/File;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public final fun scanUri (Landroid/net/Uri;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+public final class com/github/foodiestudio/sugar/modifiers/ClickKt {
+	public static final fun clickableWithoutIndication (Landroidx/compose/ui/Modifier;Lkotlin/jvm/functions/Function0;Landroidx/compose/runtime/Composer;I)Landroidx/compose/ui/Modifier;
 }
 
-public final class com/github/foodiestudio/sugar/saf/SAFHelper : okio/FileSystem {
-	public static final field INSTANCE Lcom/github/foodiestudio/sugar/saf/SAFHelper;
-	public fun appendingSink (Lokio/Path;Z)Lokio/Sink;
-	public fun atomicMove (Lokio/Path;Lokio/Path;)V
-	public fun canonicalize (Lokio/Path;)Lokio/Path;
-	public fun copy (Lokio/Path;Lokio/Path;)V
-	public fun createDirectory (Lokio/Path;Z)V
-	public fun createSymlink (Lokio/Path;Lokio/Path;)V
-	public fun delete (Lokio/Path;Z)V
-	public final fun init (Landroid/app/Application;)V
-	public fun list (Lokio/Path;)Ljava/util/List;
-	public fun listOrNull (Lokio/Path;)Ljava/util/List;
-	public fun metadataOrNull (Lokio/Path;)Lokio/FileMetadata;
-	public fun openReadOnly (Lokio/Path;)Lokio/FileHandle;
-	public fun openReadWrite (Lokio/Path;ZZ)Lokio/FileHandle;
-	public fun sink (Lokio/Path;Z)Lokio/Sink;
-	public fun source (Lokio/Path;)Lokio/Source;
+public final class com/github/foodiestudio/sugar/modifiers/DashedBorderKt {
+	public static final fun dashedBorder-aa2Vgzc (Landroidx/compose/ui/Modifier;FJF)Landroidx/compose/ui/Modifier;
 }
 
-public final class com/github/foodiestudio/sugar/saf/SAFHelperKt {
-	public static final fun absoluteFilePathOrNull (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Landroid/net/Uri;)Ljava/lang/String;
-	public static final fun copy (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Landroid/net/Uri;Ljava/io/File;)V
-	public static final fun metadataOrNull (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Landroid/net/Uri;)Lokio/FileMetadata;
-	public static final fun mimeTypeOrNull (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Landroid/net/Uri;)Ljava/lang/String;
+public final class com/github/foodiestudio/sugar/modifiers/MirrorKt {
+	public static final fun mirror (Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
 }
 
-public final class com/github/foodiestudio/sugar/saf/StoragePermissionsKt {
-	public static final fun hasReadAccessByAllApps (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Ljava/util/List;)Z
-	public static final fun hasReadAccessBySelf (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Ljava/util/List;)Z
-	public static final fun hasWriteAccessByAllApps (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Ljava/util/List;)Z
-	public static final fun hasWriteAccessBySelf (Lcom/github/foodiestudio/sugar/saf/SAFHelper;Ljava/util/List;)Z
+public final class com/github/foodiestudio/sugar/modifiers/SizeKt {
+	public static final fun forgetMinAndMaxSize (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;)Landroidx/compose/ui/Modifier;
+	public static final fun forgetMinHeight (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment$Vertical;)Landroidx/compose/ui/Modifier;
+	public static synthetic fun forgetMinHeight$default (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment$Vertical;ILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun forgetMinSize (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;)Landroidx/compose/ui/Modifier;
+	public static synthetic fun forgetMinSize$default (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment;ILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun forgetMinWidth (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment$Horizontal;)Landroidx/compose/ui/Modifier;
+	public static synthetic fun forgetMinWidth$default (Landroidx/compose/ui/Modifier;Landroidx/compose/ui/Alignment$Horizontal;ILjava/lang/Object;)Landroidx/compose/ui/Modifier;
+	public static final fun overrideHeight-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
+	public static final fun overrideHeightIn-VpY3zN4 (Landroidx/compose/ui/Modifier;FF)Landroidx/compose/ui/Modifier;
+	public static final fun overrideSize-VpY3zN4 (Landroidx/compose/ui/Modifier;FF)Landroidx/compose/ui/Modifier;
+	public static final fun overrideWidth-3ABfNKs (Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
+	public static final fun overrideWidthIn-VpY3zN4 (Landroidx/compose/ui/Modifier;FF)Landroidx/compose/ui/Modifier;
+}
+
+public final class com/github/foodiestudio/sugar/modifiers/ThenIfKt {
+	public static final fun thenIf (Landroidx/compose/ui/Modifier;ZLkotlin/jvm/functions/Function1;)Landroidx/compose/ui/Modifier;
+}
+
+public final class com/github/foodiestudio/sugar/notification/ToastKtxKt {
+	public static final fun longToast (Landroid/content/Context;I)V
+	public static final fun longToast (Landroid/content/Context;Ljava/lang/CharSequence;)V
+	public static final fun toast (Landroid/content/Context;I)V
+	public static final fun toast (Landroid/content/Context;Ljava/lang/CharSequence;)V
+}
+
+public final class com/github/foodiestudio/sugar/storage/AppFileHelper {
+	public static final field $stable I
+	public fun <init> (Landroid/content/Context;)V
+	public final fun createTempFile (Ljava/lang/String;)Ljava/io/File;
+	public static synthetic fun createTempFile$default (Lcom/github/foodiestudio/sugar/storage/AppFileHelper;Ljava/lang/String;ILjava/lang/Object;)Ljava/io/File;
+	public final fun getAbsoluteFilePath-IoAF18A (Landroid/net/Uri;)Ljava/lang/Object;
+	public final fun getCacheQuotaBytes-IoAF18A (Z)Ljava/lang/Object;
+	public final fun getFileSystem ()Lokio/FileSystem;
+	public final fun isCacheSpaceEnoughToCreate (JZ)Z
+	public final fun markCacheDirAsTombstone (Ljava/io/File;)V
+	public final synthetic fun readSensitiveFile (Ljava/lang/String;)Ljava/lang/String;
+	public final fun requestClearCacheForCreateFile-gIAlu-s (Ljava/io/File;J)Ljava/lang/Object;
+	public final fun requireCacheDir (Z)Ljava/io/File;
+	public final fun requireFilesDir (Z)Ljava/io/File;
+	public final fun takePersistableUriPermission (Landroid/net/Uri;)V
+	public final synthetic fun writeSensitiveFile (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+}
+
+public final class com/github/foodiestudio/sugar/storage/filesystem/FileSystemCompatKt {
+	public static final fun toOkioPath (Landroid/net/Uri;)Lokio/Path;
+}
+
+public final class com/github/foodiestudio/sugar/storage/filesystem/MetadataExtrasKt {
+	public static final fun getAbsoluteFilePath (Lokio/FileMetadata;)Ljava/lang/String;
+	public static final fun getDisplayName (Lokio/FileMetadata;)Ljava/lang/String;
+	public static final fun getMimeType (Lokio/FileMetadata;)Ljava/lang/String;
+}
+
+public final class com/github/foodiestudio/sugar/storage/filesystem/media/MediaFile {
+	public static final field $stable I
+	public static final field Companion Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaFile$Companion;
+	public fun <init> (Landroid/content/Context;Landroid/net/Uri;)V
+	public final fun getMediaUri ()Landroid/net/Uri;
+	public final fun getMetadata ()Lokio/FileMetadata;
+	public final fun loadThumbnail (Landroid/util/Size;)Landroid/graphics/Bitmap;
+	public final fun read (Lkotlin/jvm/functions/Function1;)V
+	public final fun releasePendingStatus ()V
+	public final fun renameTo (Ljava/lang/String;)V
+	public final fun write (Lkotlin/jvm/functions/Function1;)V
+}
+
+public final class com/github/foodiestudio/sugar/storage/filesystem/media/MediaFile$Companion {
+	public final fun create (Landroid/content/Context;Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaStoreType;Ljava/lang/String;Ljava/lang/String;Z)Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaFile;
+	public static synthetic fun create$default (Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaFile$Companion;Landroid/content/Context;Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaStoreType;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaFile;
+}
+
+public final class com/github/foodiestudio/sugar/storage/filesystem/media/MediaFileKt {
+	public static final fun moveTo (Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaFile;Ljava/lang/String;)V
+}
+
+public final class com/github/foodiestudio/sugar/storage/filesystem/media/MediaStoreType : java/lang/Enum {
+	public static final field Audio Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaStoreType;
+	public static final field Downloads Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaStoreType;
+	public static final field Images Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaStoreType;
+	public static final field Video Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaStoreType;
+	public static fun valueOf (Ljava/lang/String;)Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaStoreType;
+	public static fun values ()[Lcom/github/foodiestudio/sugar/storage/filesystem/media/MediaStoreType;
 }
 
