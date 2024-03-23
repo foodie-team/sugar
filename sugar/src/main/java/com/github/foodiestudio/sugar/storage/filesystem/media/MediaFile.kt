@@ -16,12 +16,10 @@ import okio.FileMetadata
 import okio.FileSystem
 
 /**
- * 参考自 https://github.com/anggrayudi/SimpleStorage/blob/master/storage/src/main/java/com/anggrayudi/storage/media/MediaFile.kt
- * 暂只考虑 Android 10+ 的情况
+ * 仅推荐 Android 10+ 的情况下使用
  *
  * @param mediaUri 主要里面记录了一个 id，修改路径以及 displayName 并不会影响这个 uri， 类似于 content://media/external_primary/images/media/1000060604
  */
-@RequiresApi(Build.VERSION_CODES.Q)
 @ExperimentalSugarApi
 class MediaFile(context: Context, val mediaUri: Uri) {
     init {
@@ -43,6 +41,7 @@ class MediaFile(context: Context, val mediaUri: Uri) {
     /**
      * 仅适用于视频
      */
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun loadThumbnail(size: Size): Bitmap {
         return resolver.loadThumbnail(mediaUri, size, null)
     }
@@ -62,9 +61,10 @@ class MediaFile(context: Context, val mediaUri: Uri) {
         fileSystem.read(mediaUri.toOkioPath(), action)
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun releasePendingStatus() {
         ContentValues().apply {
-            put(MediaStore.Audio.Media.IS_PENDING, 0)
+            put(MediaStore.MediaColumns.IS_PENDING, 0)
         }.let {
             resolver.update(mediaUri, it, null, null)
         }
@@ -102,8 +102,11 @@ fun MediaFile.moveTo(newRelativePath: String) {
     }
 }
 
+/**
+ * @param relativePath required Android Q
+ * @param enablePending required Android Q
+ */
 @ExperimentalSugarApi
-@RequiresApi(Build.VERSION_CODES.Q)
 private fun createFile(
     context: Context,
     type: MediaStoreType,
@@ -126,7 +129,7 @@ private fun createFile(
                     MediaStore.VOLUME_EXTERNAL_PRIMARY
                 )
 
-                else -> MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+                MediaStoreType.Downloads -> MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
             }
         } else {
             when (type) {
@@ -136,17 +139,19 @@ private fun createFile(
 
                 MediaStoreType.Video -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
 
-                else -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+                else -> TODO("Not supported on old Android devices")
             }
         }
 
     val contentValues = ContentValues().apply {
         put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-        if (!relativePath.isNullOrEmpty()) {
-            put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
-        }
-        if (enablePending) {
-            put(MediaStore.MediaColumns.IS_PENDING, 1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (!relativePath.isNullOrEmpty()) {
+                put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
+            }
+            if (enablePending) {
+                put(MediaStore.MediaColumns.IS_PENDING, 1)
+            }
         }
     }
     val uri = context.contentResolver.insert(collection, contentValues)!!
