@@ -1,5 +1,7 @@
 package com.github.foodiestudio.sugar
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.util.Log
@@ -23,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import coil.compose.AsyncImage
 import com.github.foodiestudio.sugar.notification.toast
 import com.github.foodiestudio.sugar.storage.filesystem.absoluteFilePath
@@ -67,7 +70,17 @@ internal fun MediaStoreTest(
                     exportedVideoUri = viewModel.exportVideo(context)
                     context.toast("期望出现 ~/Movies/sugar/video.mp4")
                 } else {
-                    TODO("Android 10 以下版本暂未测试")
+                    // 需先获取 WRITE_EXTERNAL_STORAGE 权限
+                    if (ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        viewModel.exportVideoInLegacyWay()
+                        context.toast("期望出现 ~/Movies/sugar/video.mp4")
+                    } else {
+                        context.toast("请先授权存储权限")
+                    }
                 }
             }, text = {
             Text(text = "写入测试")
@@ -75,22 +88,26 @@ internal fun MediaStoreTest(
             Text(text = "将测试视频写入到 Movies 文件夹下")
         }, trailing = {
             exportedVideoUri?.let {
-                Image(
-                    viewModel.loadThumbnail(context, it).asImageBitmap(),
-                    contentDescription = null
-                )
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    Image(
+                        viewModel.loadThumbnail(context, it).asImageBitmap(),
+                        contentDescription = null
+                    )
+                }
             }
         })
 
         ListItem(modifier = Modifier.clickable {
+            exportedImageUri = viewModel.exportImage(context).also {
+                // content://media/external_primary/images/media/1000060604
+                Log.d("MediaStoreTest", "exportedImageUri: $it")
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                exportedImageUri = viewModel.exportImage(context).also {
-                    // content://media/external_primary/images/media/1000060604
-                    Log.d("MediaStoreTest", "exportedImageUri: $it")
-                }
                 context.toast("期望出现 ~/Pictures/sugar/img.png")
             } else {
-                TODO("Android 10 以下版本暂未测试")
+                // 不如直接使用 AppFileHelper 的方式
+                // 需先获取 WRITE_EXTERNAL_STORAGE 权限
+                context.toast("期望出现 ~/Pictures/{随机数}.png")
             }
         }, trailing = {
             AsyncImage(
@@ -105,36 +122,30 @@ internal fun MediaStoreTest(
         })
         if (exportedImageUri != null) {
             ListItem(modifier = Modifier.clickable {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    fileMetadata = viewModel.readImageMetadata(context, exportedImageUri!!)
-                } else {
-                    TODO("Android 10 以下版本暂未测试")
-                }
+                fileMetadata = viewModel.readImageMetadata(context, exportedImageUri!!)
             }, icon = {},
                 text = {
                     Text(text = "Metadata 测试")
                 }, secondaryText = {
                     Text(text = "点击查看详情")
                 })
-            ListItem(modifier = Modifier.clickable {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ListItem(modifier = Modifier.clickable {
                     viewModel.moveImage(context, exportedImageUri!!, "DCIM/sugar")
                     context.toast("期望出现 ~/DCIM/sugar/img.png")
-                } else {
-                    TODO("Android 10 以下版本暂未测试")
-                }
-            }, icon = {},
-                text = {
-                    Text(text = "移动测试")
-                }, secondaryText = {
-                    Text(text = "移动到 DCIM 文件夹下")
-                })
+                }, icon = {},
+                    text = {
+                        Text(text = "移动测试")
+                    }, secondaryText = {
+                        Text(text = "移动到 DCIM 文件夹下")
+                    })
+            }
             ListItem(modifier = Modifier.clickable {
+                viewModel.renameImage(context, exportedImageUri!!, "newImg.png")
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    viewModel.renameImage(context, exportedImageUri!!, "newImg.png")
                     context.toast("期望出现 sugar/newImg.png")
                 } else {
-                    TODO("Android 10 以下版本暂未测试")
+                    // 并不会反映在文件名上，DisplayName 仅是一个字段而已，厂商并不会以这个为文件名
                 }
             }, icon = {},
                 text = {
