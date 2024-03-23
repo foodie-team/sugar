@@ -1,15 +1,17 @@
 package com.github.foodiestudio.sugar
 
+import android.Manifest
 import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.util.Size
 import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
 import androidx.lifecycle.AndroidViewModel
 import com.github.foodiestudio.sugar.storage.AppFileHelper
-import com.github.foodiestudio.sugar.storage.filesystem.FileSystemCompat
 import com.github.foodiestudio.sugar.storage.filesystem.media.MediaFile
 import com.github.foodiestudio.sugar.storage.filesystem.media.MediaStoreType
 import com.github.foodiestudio.sugar.storage.filesystem.media.moveTo
@@ -17,6 +19,7 @@ import com.github.foodiestudio.sugar.storage.filesystem.toOkioPath
 import okio.FileMetadata
 import okio.Path
 import okio.Path.Companion.toOkioPath
+import java.io.File
 
 @OptIn(ExperimentalSugarApi::class)
 internal class SampleViewModel(application: Application) : AndroidViewModel(application) {
@@ -45,9 +48,21 @@ internal class SampleViewModel(application: Application) : AndroidViewModel(appl
         fileHelper.fileSystem.copy(uri.toOkioPath(), testVideoPath)
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun exportVideoInLegacyWay() {
+        val directory: File =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES + "/sugar")
+        if (!directory.exists()) {
+            directory.mkdirs()
+        }
+        val target = directory.toOkioPath().resolve("video.mp4")
+        fileHelper.fileSystem.copy(
+            testVideoPath, target
+        )
+    }
+
     fun exportVideo(context: Context): Uri {
-        val source = FileSystemCompat(context).source(testVideoPath)
+        val source = fileHelper.fileSystem.source(testVideoPath)
         return MediaFile.create(
             context,
             MediaStoreType.Video,
@@ -58,30 +73,29 @@ internal class SampleViewModel(application: Application) : AndroidViewModel(appl
             it.write {
                 writeAll(source)
             }
-            it.releasePendingStatus()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                it.releasePendingStatus()
+            }
             it.mediaUri
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     fun exportImage(context: Context): Uri {
-        val source = FileSystemCompat(context).source(testImagePath)
+        val source = fileHelper.fileSystem.source(testImagePath)
         return MediaFile.create(
             context,
             MediaStoreType.Images,
             relativePath = "Pictures/sugar",
             fileName = "img.png", // 如果本身已经存在这个名字的文件，会自动补上(1)这类数字后缀
-            enablePending = true
+            enablePending = false
         ).let {
             it.write {
                 writeAll(source)
             }
-            it.releasePendingStatus()
             it.mediaUri
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     fun readImageMetadata(context: Context, exportedImageUri: Uri): FileMetadata {
         return MediaFile(context, exportedImageUri).metadata
     }
@@ -91,7 +105,6 @@ internal class SampleViewModel(application: Application) : AndroidViewModel(appl
         MediaFile(context, exportedImageUri).moveTo(newRelativePath)
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     fun renameImage(context: Context, exportedImageUri: Uri, name: String) {
         MediaFile(context, exportedImageUri).renameTo(displayName = name)
     }

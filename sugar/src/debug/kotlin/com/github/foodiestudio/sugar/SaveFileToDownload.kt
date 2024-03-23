@@ -26,7 +26,7 @@ internal fun SaveFileToDownload(modifier: Modifier, viewModel: SampleViewModel) 
                 viewModel.saveTextToDownload(context, "Hello world")
                 context.toast("期望出现 Download/sugar/demo.txt")
             } else {
-                TODO("Android 10 以下版本暂未测试")
+                context.toast("需写入权限，无法使用 MediaStore 的方式")
             }
         }, text = {
             Text(text = "写入测试")
