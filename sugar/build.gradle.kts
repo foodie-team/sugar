@@ -49,6 +49,8 @@ dependencies {
     api(sharedLibs.okio)
     implementation(libs.documentfile)
 
+    testImplementation(libs.kotlinx.coroutines.test)
+
     // debugOnly
     debugImplementation(sharedLibs.activity.compose)
     debugImplementation(libs.viewmodel.compose)

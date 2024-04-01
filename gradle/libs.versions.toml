@@ -12,5 +12,6 @@ modernstorage-storage = { module = "com.google.modernstorage:modernstorage-stora
 documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
 viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
 coil-video = "io.coil-kt:coil-video:2.3.0"
+kotlinx-coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
 
 [bundles]
