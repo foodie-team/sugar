@@ -74,6 +74,7 @@ public final class com/github/foodiestudio/sugar/storage/AppFileHelper {
 
 public final class com/github/foodiestudio/sugar/storage/filesystem/FileSystemCompatKt {
 	public static final fun toOkioPath (Landroid/net/Uri;)Lokio/Path;
+	public static final fun toUri (Lokio/Path;)Landroid/net/Uri;
 }
 
 public final class com/github/foodiestudio/sugar/storage/filesystem/MetadataExtrasKt {

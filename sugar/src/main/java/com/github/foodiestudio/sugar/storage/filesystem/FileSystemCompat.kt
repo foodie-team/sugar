@@ -16,6 +16,16 @@ import okio.Source
  */
 fun Uri.toOkioPath(): Path = this.toString().toPath(false)
 
+fun Path.toUri(): Uri {
+    val str = this.toString()
+
+    if (str.startsWith("content:/")) {
+        return Uri.parse(str.replace("content:/", "content://"))
+    }
+
+    return Uri.parse(str)
+}
+
 /**
  * 操作对应的 [FileSystem] 时，需要确保有对应的权限
  */
@@ -45,9 +55,11 @@ internal class FileSystemCompat(context: Context) : FileSystem() {
             isPhysicalFile(source) && isPhysicalFile(target) -> {
                 appFileSystem.atomicMove(source, target)
             }
+
             !isPhysicalFile(source) && !isPhysicalFile(target) -> {
                 documentFileSystem.atomicMove(source, target)
             }
+
             else -> TODO("Not yet implemented")
         }
     }
@@ -72,9 +84,11 @@ internal class FileSystemCompat(context: Context) : FileSystem() {
             isPhysicalFile(source) && isPhysicalFile(target) -> {
                 appFileSystem.createSymlink(source, target)
             }
+
             !isPhysicalFile(source) && !isPhysicalFile(target) -> {
                 documentFileSystem.createSymlink(source, target)
             }
+
             else -> TODO("Not yet implemented")
         }
     }

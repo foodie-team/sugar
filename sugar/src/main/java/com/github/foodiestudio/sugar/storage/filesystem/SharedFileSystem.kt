@@ -2,7 +2,6 @@ package com.github.foodiestudio.sugar.storage.filesystem
 
 import android.content.ContentResolver
 import android.content.Context
-import android.net.Uri
 import okio.FileHandle
 import okio.FileSystem
 import okio.Path
@@ -17,16 +16,6 @@ import java.io.IOException
  */
 internal abstract class SharedFileSystem(context: Context) : FileSystem() {
     protected val contentResolver: ContentResolver = context.contentResolver
-
-    protected fun Path.toUri(): Uri {
-        val str = this.toString()
-
-        if (str.startsWith("content:/")) {
-            return Uri.parse(str.replace("content:/", "content://"))
-        }
-
-        return Uri.parse(str)
-    }
 
     override fun appendingSink(file: Path, mustExist: Boolean): Sink {
         val uri = file.toUri()

@@ -4,6 +4,7 @@ import android.content.Context
 import android.provider.MediaStore
 import com.github.foodiestudio.sugar.storage.filesystem.MetadataExtras
 import com.github.foodiestudio.sugar.storage.filesystem.SharedFileSystem
+import com.github.foodiestudio.sugar.storage.filesystem.toUri
 import okio.FileMetadata
 import okio.Path
 import java.io.IOException
