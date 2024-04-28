@@ -184,7 +184,10 @@ class AppFileHelper(private val applicationContext: Context) {
         }!!
     }
 
-    // 在设备重启后保留对文件的访问权限并提供更出色的用户体验，您的应用可以“获取”系统提供的永久性 URI 访问权限
+    /**
+     * 在设备重启后保留对文件的访问权限并提供更出色的用户体验，您的应用可以“获取”系统提供的永久性 document URI 访问权限
+     * 注意，仅限 OPEN_DOCUMENT 等 SAF 相关的 Intent，不包括 GET_CONTENT 这种
+     */
     fun takePersistableUriPermission(documentUri: Uri) {
         val contentResolver = applicationContext.contentResolver
 
