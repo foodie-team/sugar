@@ -31,11 +31,10 @@ private data class DashedBorderElement(
         cornerRadius = cornerRadius
     )
 
-    override fun update(node: DashedBorderNode): DashedBorderNode {
+    override fun update(node: DashedBorderNode) {
         node.color = color
         node.cornerRadius = cornerRadius
         node.strokeWidth = strokeWidth
-        return node
     }
 }
 

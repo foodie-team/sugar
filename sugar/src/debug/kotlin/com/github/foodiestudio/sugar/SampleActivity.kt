@@ -7,12 +7,13 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -26,7 +27,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,6 +39,7 @@ import coil.compose.AsyncImage
 import coil.decode.VideoFrameDecoder
 import coil.request.ImageRequest
 import coil.request.videoFrameMillis
+import com.github.foodiestudio.sugar.modifiers.dashedBorder
 
 // 主要测试下 MediaStore 以及 Document 的移动
 class SampleActivity : ComponentActivity() {
@@ -176,6 +181,7 @@ private fun Home(viewModel: SampleViewModel, onNavigateNext: () -> Unit) {
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun MenuItem(
     modifier: Modifier = Modifier,
@@ -198,13 +204,16 @@ private fun MenuItem(
                     modifier = Modifier.weight(1f)
                 )
             } else {
-                Button(
-                    onClick = onClick,
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
                     modifier = Modifier
-                        .size(64.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = null)
-                }
+                        .dashedBorder(2.dp, Color.Blue, 8.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable(onClick = onClick)
+                        .padding(16.dp)
+                        .size(24.dp)
+                )
             }
             Text(
                 text = text,

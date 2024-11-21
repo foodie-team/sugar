@@ -18,9 +18,11 @@ val launchAsApplication = project.plugins.findPlugin("foodiestudio.android.libra
 
 android {
     namespace = "com.github.foodiestudio.sugar"
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 26
+        targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -53,6 +55,7 @@ dependencies {
     debugImplementation(sharedLibs.activity.compose)
     debugImplementation(libs.viewmodel.compose)
     debugImplementation(sharedLibs.compose.material)
+    debugImplementation(platform(sharedLibs.coil.bom))
     debugImplementation(sharedLibs.coil)
     debugImplementation(libs.coil.video)
 }
